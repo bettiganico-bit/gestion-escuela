@@ -3,101 +3,204 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión Escolar - Secundaria</title>
+  <title>Sistema de Gestión Escolar - Secundaria</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans">
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex">
 
-  <header class="bg-indigo-700 text-white p-4 shadow-md">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <h1 class="text-xl font-bold">Panel de Gestión Escolar</h1>
-      <button onclick="cargarDatos()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm px-3 py-1.5 rounded border border-indigo-400">
-        🔄 Actualizar
-      </button>
+  <!-- Sidebar / Barra Lateral -->
+  <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col justify-between hidden md:flex">
+    <div class="p-6">
+      <div class="flex items-center gap-3 text-indigo-400 font-bold text-xl mb-8">
+        <i class="fa-solid fa-graduation-cap text-2xl"></i>
+        <span>Secundaria</span>
+      </div>
+      <nav class="space-y-2">
+        <a href="#" class="flex items-center gap-3 px-4 py-3 bg-indigo-600 text-white rounded-xl font-medium">
+          <i class="fa-solid fa-chart-pie"></i> Dashboard
+        </a>
+        <a href="#" onclick="cargarDatos()" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-700 hover:text-white rounded-xl font-medium transition">
+          <i class="fa-solid fa-rotate"></i> Sincronizar
+        </a>
+      </nav>
     </div>
-  </header>
+    <div class="p-4 border-t border-slate-700 text-xs text-slate-500 text-center">
+      Google Sheets Sync Active
+    </div>
+  </aside>
 
-  <main class="max-w-4xl mx-auto p-4 space-y-6">
+  <!-- Contenido Principal -->
+  <div class="flex-1 flex flex-col">
 
-    <!-- Formulario para agregar nuevo alumno -->
-    <section class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-      <h2 class="text-lg font-semibold mb-3 text-indigo-900">Registrar Nuevo Alumno</h2>
-      <form id="registroForm" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <input type="text" id="nombre" placeholder="Nombre completo del alumno" required class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        <select id="pago" class="p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="PAGÓ">Pago: Al día</option>
-          <option value="PENDIENTE">Pago: Pendiente</option>
-        </select>
-        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium p-2 rounded-lg transition">
-          + Guardar Registro
-        </button>
-      </form>
-    </section>
+    <!-- Header Principal -->
+    <header class="bg-slate-800 border-b border-slate-700 p-4 flex justify-between items-center px-8">
+      <div>
+        <h1 class="text-xl font-bold text-white">Matriculación y Asistencia</h1>
+        <p class="text-xs text-slate-400">Control unificado conectado a Google Sheets</p>
+      </div>
+      <button onclick="cargarDatos()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 shadow-lg transition">
+        <i class="fa-solid fa-rotate"></i> Actualizar Datos
+      </button>
+    </header>
 
-    <!-- Tabla de datos desde Google Sheets -->
-    <section class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-lg font-semibold text-indigo-900">Listado de Planilla</h2>
-        <span id="estadoCarga" class="text-xs text-slate-500">Cargando datos...</span>
+    <main class="p-8 space-y-8 flex-1 overflow-y-auto">
+
+      <!-- Métricas Rápidas -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Alumnos</p>
+            <h3 id="metricTotal" class="text-3xl font-extrabold text-white mt-1">--</h3>
+          </div>
+          <div class="w-12 h-12 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center text-xl">
+            <i class="fa-solid fa-users"></i>
+          </div>
+        </div>
+
+        <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pagos Al Día</p>
+            <h3 id="metricPagados" class="text-3xl font-extrabold text-emerald-400 mt-1">--</h3>
+          </div>
+          <div class="w-12 h-12 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-xl">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+        </div>
+
+        <div class="bg-slate-800 border border-slate-700 p-5 rounded-2xl flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Pagos Pendientes</p>
+            <h3 id="metricPendientes" class="text-3xl font-extrabold text-rose-400 mt-1">--</h3>
+          </div>
+          <div class="w-12 h-12 bg-rose-500/10 text-rose-400 rounded-xl flex items-center justify-center text-xl">
+            <i class="fa-solid fa-clock"></i>
+          </div>
+        </div>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr id="encabezadosTabla" class="border-b bg-slate-50 text-slate-600 text-xs uppercase tracking-wider">
-              <!-- Se cargan dinámicamente -->
-            </tr>
-          </thead>
-          <tbody id="cuerpoTabla" class="divide-y divide-slate-100 text-sm">
-            <!-- Se cargan dinámicamente -->
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <!-- Formulario para agregar nuevo alumno -->
+      <section class="bg-slate-800 border border-slate-700 p-6 rounded-2xl shadow-xl">
+        <h2 class="text-md font-semibold text-white mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-indigo-400"></i> Registrar o Agregar Alumno
+        </h2>
+        <form id="registroForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input type="text" id="nombre" placeholder="Nombre y Apellido del alumno" required class="bg-slate-900 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-indigo-500 text-sm">
+          <select id="pago" class="bg-slate-900 border border-slate-700 text-white px-4 py-3 rounded-xl focus:outline-none focus:border-indigo-500 text-sm">
+            <option value="SI">Pago: Al día (SI)</option>
+            <option value="NO">Pago: Pendiente (NO)</option>
+          </select>
+          <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-lg">
+            <i class="fa-solid fa-floppy-disk"></i> Guardar Registro
+          </button>
+        </form>
+      </section>
 
-  </main>
+      <!-- Tabla de Datos -->
+      <section class="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-6 border-b border-slate-700 flex justify-between items-center">
+          <div>
+            <h2 class="text-md font-semibold text-white">Registros en la Planilla</h2>
+            <p id="estadoCarga" class="text-xs text-slate-400 mt-1">Sincronizando...</p>
+          </div>
+          <input type="text" id="buscador" onkeyup="filtrarTabla()" placeholder="Buscar alumno..." class="bg-slate-900 border border-slate-700 text-white px-4 py-2 rounded-xl text-xs focus:outline-none focus:border-indigo-500 w-64">
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr id="encabezadosTabla" class="bg-slate-900/50 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-700">
+                <!-- Dinámico -->
+              </tr>
+            </thead>
+            <tbody id="cuerpoTabla" class="divide-y divide-slate-700/50 text-sm text-slate-200">
+              <!-- Dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
 
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaDJPV3UglmOBx-6bpzJmgGhIKfVs1a-8zZmGtYb6Jxyq7b_c5xYPvqyX0Spydvnsm/exec";
+    let datosLocales = [];
 
     async function cargarDatos() {
       const estado = document.getElementById("estadoCarga");
-      estado.innerText = "Sincronizando con Google Sheets...";
+      estado.innerText = "Cargando datos desde Google Sheets...";
       try {
-        const respuesta = await fetch(SCRIPT_URL);
+        const respuesta = await fetch(SCRIPT_URL, { redirect: "follow" });
         const datos = await respuesta.json();
         
         if (datos && datos.length > 0) {
-          // Encabezados
-          const trEncabezados = document.getElementById("encabezadosTabla");
-          trEncabezados.innerHTML = "";
-          datos[0].forEach(columna => {
-            const th = document.createElement("th");
-            th.className = "p-3 font-semibold";
-            th.innerText = columna;
-            trEncabezados.appendChild(th);
-          });
-
-          // Filas
-          const cuerpo = document.getElementById("cuerpoTabla");
-          cuerpo.innerHTML = "";
-          datos.slice(1).forEach(fila => {
-            const tr = document.createElement("tr");
-            tr.className = "hover:bg-slate-50";
-            fila.forEach(celda => {
-              const td = document.createElement("td");
-              td.className = "p-3";
-              td.innerText = celda;
-              tr.appendChild(td);
-            });
-            cuerpo.appendChild(tr);
-          });
-          estado.innerText = "Sincronizado ✅";
+          datosLocales = datos;
+          renderizarTabla(datos);
+          calcularMetricas(datos);
+          estado.innerText = "Sincronizado correctamente ✅";
+        } else {
+          estado.innerText = "La planilla está vacía.";
         }
       } catch (error) {
         console.error(error);
-        estado.innerText = "Error al conectar con la planilla.";
+        estado.innerText = "Error de conexión. Revisa el despliegue del script.";
       }
+    }
+
+    function renderizarTabla(datos) {
+      const trEncabezados = document.getElementById("encabezadosTabla");
+      const cuerpo = document.getElementById("cuerpoTabla");
+      
+      trEncabezados.innerHTML = "";
+      cuerpo.innerHTML = "";
+
+      // Encabezados
+      datos[0].forEach(col => {
+        const th = document.createElement("th");
+        th.className = "p-4 font-semibold";
+        th.innerText = col;
+        trEncabezados.appendChild(th);
+      });
+
+      // Filas
+      datos.slice(1).forEach(fila => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-700/30 transition border-b border-slate-700/30";
+        fila.forEach(celda => {
+          const td = document.createElement("td");
+          td.className = "p-4";
+          td.innerText = celda;
+          tr.appendChild(td);
+        });
+        cuerpo.appendChild(tr);
+      });
+    }
+
+    function calcularMetricas(datos) {
+      const filas = datos.slice(1);
+      document.getElementById("metricTotal").innerText = filas.length;
+      
+      let pagados = 0;
+      let pendientes = 0;
+
+      filas.forEach(f => {
+        const estadoPago = f.join(" ").toUpperCase();
+        if (estadoPago.includes("SI") || estadoPago.includes("PAGÓ") || estadoPago.includes("MATRICULA")) {
+          pagados++;
+        } else {
+          pendientes++;
+        }
+      });
+
+      document.getElementById("metricPagados").innerText = pagados;
+      document.getElementById("metricPendientes").innerText = pendientes;
+    }
+
+    function filtrarTabla() {
+      const texto = document.getElementById("buscador").value.toLowerCase();
+      const filasFiltradas = [datosLocales[0], ...datosLocales.slice(1).filter(f => f.join(" ").toLowerCase().includes(texto))];
+      renderizarTabla(filasFiltradas);
     }
 
     document.getElementById("registroForm").addEventListener("submit", async (e) => {
@@ -106,25 +209,27 @@
       const pago = document.getElementById("pago").value;
       const estado = document.getElementById("estadoCarga");
 
-      estado.innerText = "Guardando en Google Sheets...";
+      estado.innerText = "Enviando registro a Google Sheets...";
 
-      // Envía datos a la planilla (se adaptan al orden de tus columnas)
-      const nuevosDatos = [new Date().toLocaleDateString(), nombre, pago, "Presente"];
+      const nuevosDatos = [new Date().toLocaleDateString(), nombre, pago];
 
       try {
         await fetch(SCRIPT_URL, {
           method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ datos: nuevosDatos })
         });
+        
         document.getElementById("nombre").value = "";
-        cargarDatos();
+        estado.innerText = "Registro enviado. Actualizando en 2 segundos...";
+        setTimeout(cargarDatos, 2000);
       } catch (error) {
         console.error(error);
-        estado.innerText = "Error al guardar.";
+        estado.innerText = "Error al enviar el registro.";
       }
     });
 
-    // Cargar al iniciar
     cargarDatos();
   </script>
 </body>
