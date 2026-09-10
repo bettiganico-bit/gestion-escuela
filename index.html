@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Esteban Echeverría - Gestión REMA & Matriculación</title>
   
-  <!-- Google Fonts Oficiales: Montserrat & Open Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -38,12 +37,11 @@
     .badge-verde { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
     .badge-naranja { background-color: #ffedd5; color: #9a3412; border: 1px solid #fde68a; }
     .badge-rojo { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-    .badge-nuevo { background-color: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
   </style>
 </head>
 <body class="bg-vaneduc-bg font-sans min-h-screen flex flex-col text-slate-800">
 
-  <!-- Header Institucional -->
+  <!-- Header -->
   <header class="bg-vaneduc-navy text-white shadow-xl border-b-4 border-vaneduc-gold">
     <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-between items-center gap-4">
       <div class="flex items-center space-x-4">
@@ -63,7 +61,7 @@
     </div>
   </header>
 
-  <!-- Pestañas de Navegación -->
+  <!-- Pestañas -->
   <div class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-30">
     <div class="max-w-7xl mx-auto px-6 flex space-x-2 md:space-x-8 text-sm font-display font-bold overflow-x-auto">
       <button onclick="cambiarSeccion('rema7')" id="tabRema7" class="py-3.5 border-b-2 border-vaneduc-navy text-vaneduc-navy flex items-center space-x-2 whitespace-nowrap">
@@ -87,7 +85,7 @@
 
   <main class="max-w-7xl mx-auto px-6 py-6 flex-1 w-full space-y-6">
 
-    <!-- RESUMEN MÉTRICO -->
+    <!-- Tarjetas de métricas -->
     <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
       <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
         <p class="text-xs font-display font-bold text-slate-400 uppercase">Vista Actual</p>
@@ -111,7 +109,7 @@
       </div>
     </div>
 
-    <!-- PANEL DE FILTROS DE BÚSQUEDA -->
+    <!-- Filtros -->
     <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
       <div class="flex justify-between items-center border-b pb-2 border-slate-100">
         <span class="text-xs font-display font-bold text-vaneduc-navy uppercase tracking-wider flex items-center space-x-2">
@@ -134,7 +132,7 @@
       </div>
     </div>
 
-    <!-- TABLA DE DATOS -->
+    <!-- Tabla -->
     <div id="secTabla" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left text-sm">
@@ -143,8 +141,9 @@
               <th class="p-3.5">Código</th>
               <th class="p-3.5">Alumno</th>
               <th class="p-3.5">Grado / Curso</th>
+              <th class="p-3.5 text-center">Pago</th>
+              <th class="p-3.5 text-center">Estado / Respuesta</th>
               <th class="p-3.5">Turno / Detalle</th>
-              <th class="p-3.5 text-center">Estado Pago / Inscripción</th>
               <th class="p-3.5">Observaciones</th>
               <th class="p-3.5 text-center">Ficha</th>
             </tr>
@@ -156,13 +155,13 @@
       </div>
     </div>
 
-    <!-- VISTA PRE-PLANTA ORGÁNICA -->
+    <!-- Pre-Planta Orgánica -->
     <div id="secPreplanta" class="space-y-6 hidden">
       <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
         <div class="flex flex-wrap justify-between items-center mb-6">
           <div>
-            <h2 class="text-lg font-display font-bold text-vaneduc-navy">Sintesis Pre-Planta Orgánica</h2>
-            <p class="text-xs text-slate-500">Mapeo de matrícula confirmada y proyecciones grupales.</p>
+            <h2 class="text-lg font-display font-bold text-vaneduc-navy">Síntesis Pre-Planta Orgánica 2027</h2>
+            <p class="text-xs text-slate-500">Distribución de matrículas confirmadas y proyecciones por curso.</p>
           </div>
           <span class="bg-vaneduc-lightBlue text-vaneduc-navy px-3 py-1 rounded-full text-xs font-display font-bold border border-blue-200">
             Cierre Institucional
@@ -170,7 +169,6 @@
         </div>
 
         <div id="gridPreplanta" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <!-- Tarjetas de Preplanta -->
         </div>
       </div>
     </div>
@@ -194,12 +192,12 @@
             <span id="mCurso" class="font-bold text-slate-700">--</span>
           </div>
           <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span class="text-xs text-slate-400 font-display font-bold block">TURNO / SECCIÓN</span>
+            <span class="text-xs text-slate-400 font-display font-bold block">TURNO / DETALLE</span>
             <span id="mTurno" class="font-bold text-vaneduc-blue">--</span>
           </div>
         </div>
         <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-          <span class="text-xs text-slate-400 font-display font-bold block mb-1">ESTADO PAGO / MATRÍCULA</span>
+          <span class="text-xs text-slate-400 font-display font-bold block mb-1">ESTADO / RESPUESTA</span>
           <span id="mEstado" class="font-bold block">--</span>
         </div>
         <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
@@ -216,10 +214,67 @@
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaDJPV3UglmOBx-6bpzJmgGhIKfVs1a-8zZmGtYb6Jxyq7b_c5xYPvqyX0Spydvnsm/exec";
     
+    let todosLosAlumnos = [];
     let datosRema7 = [];
     let datosRema14 = [];
     let datosNuevos = [];
     let seccionActiva = 'rema7';
+
+    // Normalizador de filas según solapa
+    function parsearFila(row) {
+      if (!row || row.length === 0) return null;
+
+      // Buscar si es encabezado o fila vacía
+      const strRow = row.join(" ").toUpperCase();
+      if (strRow.includes("CÓDIGO") || strRow.includes("NOMBRE Y APELLIDO") || strRow.includes("CITADE")) return null;
+
+      // Limpiar celdas nulas
+      const clean = row.map(c => (c !== null && c !== undefined) ? c.toString().trim() : "");
+      
+      // Filtrar filas completamente vacías
+      if (clean.every(c => c === "")) return null;
+
+      // Encontrar código que empieza con CO
+      let codigo = clean.find(c => c.startsWith("CO")) || clean[1] || clean[0] || "";
+      let nombre = clean.find(c => c.includes(",") || (c.length > 5 && !c.startsWith("CO") && isNaN(c))) || clean[2] || "";
+
+      // Asignar según patrones
+      let curso = "", pago = "", estado = "", turno = "", obs = "";
+
+      // Si es REMA 7° (tiene 7º o Mañana/Tarde)
+      if (strRow.includes("7º") || strRow.includes("MAÑANA") || strRow.includes("TARDE")) {
+        curso = clean.find(c => c.includes("7º")) || "7º A";
+        pago = clean.find(c => c === "SI" || c === "NO") || "";
+        estado = clean.find(c => c === "CONFIRMADO" || c === "NO MATRICULA" || c === "PENDIENTE") || "";
+        turno = clean.find(c => c === "Mañana" || c === "Tarde" || c === "NO ASIGNADO") || "";
+        obs = clean[7] || clean[6] || "";
+      } 
+      // Si es REMA 1° a 4°
+      else if (strRow.includes("1 A") || strRow.includes("1 B") || strRow.includes("2 A") || strRow.includes("2 B") || strRow.includes("3 A") || strRow.includes("3 B") || strRow.includes("4 A") || strRow.includes("4 B") || strRow.includes("LAB")) {
+        curso = clean.find(c => /^[1-4]º?\s?[A-B]/.test(c) || c.includes("Lab")) || clean[2] || "";
+        let sis = clean.filter(c => c === "SI" || c === "NO");
+        pago = sis[1] || sis[0] || "";
+        estado = clean.find(c => c === "PENDIENTE" || c === "MOROSIDAD" || c === "SI" || c === "NO") || "";
+        obs = clean[7] || clean[8] || clean[6] || "";
+      }
+      // Nuevos
+      else {
+        curso = clean.find(c => c.includes("º")) || clean[6] || "";
+        estado = clean.find(c => c === "EXTERNO" || c === "INGRESANTE") || "NUEVO";
+        obs = clean[3] || "";
+      }
+
+      return {
+        codigo: codigo,
+        nombre: nombre,
+        curso: curso,
+        pago: pago,
+        estado: estado,
+        turno: turno,
+        obs: obs,
+        raw: clean
+      };
+    }
 
     async function cargarDatos() {
       const txt = document.getElementById("txtEstado");
@@ -228,11 +283,12 @@
         const res = await fetch(SCRIPT_URL, { redirect: "follow" });
         const raw = await res.json();
 
-        if (raw) {
-          // Clasificación inteligente de las solapas
-          datosRema7 = raw.filter(f => (f[3]||"").toString().includes("7º") || (f[2]||"").toString().includes("7º"));
-          datosNuevos = raw.filter(f => (f[4]||"").toString().includes("EXTERNO") || (f[0]||"").toString().includes("TVSE"));
-          datosRema14 = raw.filter(f => !datosRema7.includes(f) && !datosNuevos.includes(f));
+        if (raw && Array.isArray(raw)) {
+          const parseados = raw.map(parsearFila).filter(f => f !== null && f.nombre !== "");
+
+          datosRema7 = parseados.filter(f => f.curso.includes("7º") || f.raw.join(" ").includes("7º"));
+          datosNuevos = parseados.filter(f => f.estado === "EXTERNO" || f.raw.join(" ").includes("EXTERNO"));
+          datosRema14 = parseados.filter(f => !datosRema7.includes(f) && !datosNuevos.includes(f));
 
           poblarCursos();
           filtrar();
@@ -258,12 +314,11 @@
       const cursos = new Set();
 
       dataset.forEach(f => {
-        const c = f[3] || f[2];
-        if(c) cursos.add(c);
+        if(f.curso) cursos.add(f.curso);
       });
 
       sel.innerHTML = '<option value="">Todos los Cursos</option>';
-      cursos.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
+      Array.from(cursos).sort().forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
     }
 
     function filtrar() {
@@ -273,18 +328,18 @@
       const dataset = getDatosActuales();
 
       const res = dataset.filter(f => {
-        const cod = (f[0]||"").toString().toLowerCase();
-        const nom = (f[1]||"").toString().toLowerCase();
-        const cur = (f[3]||f[2]||"").toString();
-        const eRaw = (f[4]||f[5]||f[6]||"").toString().toUpperCase();
+        const cod = f.codigo.toLowerCase();
+        const nom = f.nombre.toLowerCase();
+        const cur = f.curso;
+        const eRaw = (f.pago + " " + f.estado).toUpperCase();
 
         const matchQ = nom.includes(q) || cod.includes(q);
         const matchC = !curso || cur === curso;
 
         let matchE = true;
-        if (est === "VERDE") matchE = eRaw.includes("SI") || eRaw.includes("CONFIRMADO") || eRaw.includes("PAGO");
-        if (est === "NARANJA") matchE = eRaw.includes("PENDIENTE") || eRaw.includes("EN PROCESO");
-        if (est === "ROJO") matchE = eRaw.includes("NO") || eRaw.includes("BAJA");
+        if (est === "VERDE") matchE = eRaw.includes("SI") || eRaw.includes("CONFIRMADO");
+        if (est === "NARANJA") matchE = eRaw.includes("PENDIENTE") || eRaw.includes("MOROSIDAD");
+        if (est === "ROJO") matchE = eRaw.includes("NO MATRICULA") || eRaw.includes("BAJA") || (eRaw.includes("NO") && !eRaw.includes("CONFIRMADO"));
 
         return matchQ && matchC && matchE;
       });
@@ -301,21 +356,28 @@
         const tr = document.createElement("tr");
         tr.className = "hover:bg-slate-50 border-b border-slate-100 transition";
 
-        const eRaw = (f[4]||f[5]||f[6]||"").toString().toUpperCase();
+        const eRaw = (f.pago + " " + f.estado).toUpperCase();
         let eBadge = '<span class="badge-naranja px-2.5 py-1 rounded-full text-xs font-bold">🟠 Pendiente</span>';
-        if (eRaw.includes("SI") || eRaw.includes("CONFIRMADO") || eRaw.includes("PAGO")) {
-          eBadge = '<span class="badge-verde px-2.5 py-1 rounded-full text-xs font-bold">🟢 Confirmado / Pago</span>';
-        } else if (eRaw.includes("NO") || eRaw.includes("BAJA")) {
-          eBadge = '<span class="badge-rojo px-2.5 py-1 rounded-full text-xs font-bold">🔴 Baja / No Pago</span>';
+        if (eRaw.includes("CONFIRMADO") || (f.pago === "SI" && !eRaw.includes("NO MATRICULA"))) {
+          eBadge = '<span class="badge-verde px-2.5 py-1 rounded-full text-xs font-bold">🟢 Confirmado</span>';
+        } else if (eRaw.includes("NO MATRICULA") || eRaw.includes("BAJA")) {
+          eBadge = '<span class="badge-rojo px-2.5 py-1 rounded-full text-xs font-bold">🔴 No Matricula / Baja</span>';
         }
 
+        const pagoBadge = f.pago === "SI" 
+          ? '<span class="text-emerald-700 font-extrabold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">SI</span>' 
+          : f.pago === "NO" 
+            ? '<span class="text-rose-700 font-extrabold bg-rose-50 px-2 py-0.5 rounded border border-rose-200">NO</span>' 
+            : '<span class="text-slate-400">-</span>';
+
         tr.innerHTML = `
-          <td class="p-3.5 font-mono text-xs text-slate-500 font-semibold">${f[0]||'--'}</td>
-          <td class="p-3.5 font-bold text-slate-800">${f[1]||'--'}</td>
-          <td class="p-3.5 text-slate-600">${f[2]||f[3]||'--'}</td>
-          <td class="p-3.5 text-vaneduc-blue font-semibold">${f[4]||f[5]||'--'}</td>
+          <td class="p-3.5 font-mono text-xs text-slate-500 font-semibold">${f.codigo || '--'}</td>
+          <td class="p-3.5 font-bold text-slate-800">${f.nombre || '--'}</td>
+          <td class="p-3.5 text-slate-600 font-semibold">${f.curso || '--'}</td>
+          <td class="p-3.5 text-center">${pagoBadge}</td>
           <td class="p-3.5 text-center">${eBadge}</td>
-          <td class="p-3.5 text-xs text-slate-500 truncate max-w-xs">${f[7]||f[6]||'-'}</td>
+          <td class="p-3.5 text-vaneduc-blue font-semibold">${f.turno || f.estado || '--'}</td>
+          <td class="p-3.5 text-xs text-slate-500 truncate max-w-xs">${f.obs || '-'}</td>
           <td class="p-3.5 text-center">
             <button onclick="abrirFicha(${idx})" class="text-vaneduc-blue hover:text-blue-700 text-lg">
               <i class="fa-solid fa-address-card"></i>
@@ -332,9 +394,9 @@
 
       let v = 0, n = 0, r = 0;
       filasActuales.forEach(f => {
-        const est = (f[4]||f[5]||f[6]||"").toString().toUpperCase();
-        if (est.includes("SI") || est.includes("CONFIRMADO") || est.includes("PAGO")) v++;
-        else if (est.includes("NO") || est.includes("BAJA")) r++;
+        const est = (f.pago + " " + f.estado).toUpperCase();
+        if (est.includes("CONFIRMADO") || (f.pago === "SI" && !est.includes("NO MATRICULA"))) v++;
+        else if (est.includes("NO MATRICULA") || est.includes("BAJA")) r++;
         else n++;
       });
 
@@ -350,11 +412,11 @@
       const cursos = {};
 
       todos.forEach(f => {
-        const c = f[2] || f[3] || "Sin Especificar";
+        const c = f.curso || "Sin Especificar";
         if (!cursos[c]) cursos[c] = { total: 0, ok: 0 };
         cursos[c].total++;
-        const est = (f[4]||f[5]||f[6]||"").toString().toUpperCase();
-        if (est.includes("SI") || est.includes("CONFIRMADO") || est.includes("PAGO")) cursos[c].ok++;
+        const est = (f.pago + " " + f.estado).toUpperCase();
+        if (est.includes("CONFIRMADO") || (f.pago === "SI" && !est.includes("NO MATRICULA"))) cursos[c].ok++;
       });
 
       Object.keys(cursos).sort().forEach(c => {
@@ -380,18 +442,18 @@
 
     function abrirFicha(idx) {
       const f = getDatosActuales()[idx];
-      document.getElementById("mCodigo").innerText = f[0] || 'S/D';
-      document.getElementById("mNombre").innerText = f[1] || 'S/D';
-      document.getElementById("mCurso").innerText = f[2] || f[3] || 'S/D';
-      document.getElementById("mTurno").innerText = f[4] || f[5] || 'S/D';
+      document.getElementById("mCodigo").innerText = f.codigo || 'S/D';
+      document.getElementById("mNombre").innerText = f.nombre || 'S/D';
+      document.getElementById("mCurso").innerText = f.curso || 'S/D';
+      document.getElementById("mTurno").innerText = f.turno || f.estado || 'S/D';
       
-      const eRaw = (f[4]||f[5]||f[6]||"").toString().toUpperCase();
+      const eRaw = (f.pago + " " + f.estado).toUpperCase();
       let eTxt = "🟠 Pendiente de regularizar";
-      if (eRaw.includes("SI") || eRaw.includes("CONFIRMADO") || eRaw.includes("PAGO")) eTxt = "🟢 Confirmado / Pago registrado";
-      else if (eRaw.includes("NO") || eRaw.includes("BAJA")) eTxt = "🔴 Baja / No inscripto";
+      if (eRaw.includes("CONFIRMADO") || (f.pago === "SI" && !eRaw.includes("NO MATRICULA"))) eTxt = "🟢 Confirmado / Pago registrado";
+      else if (eRaw.includes("NO MATRICULA") || eRaw.includes("BAJA")) eTxt = "🔴 Baja / No inscripto";
 
       document.getElementById("mEstado").innerText = eTxt;
-      document.getElementById("mObs").innerText = f[7] || f[6] || 'Sin observaciones.';
+      document.getElementById("mObs").innerText = f.obs || 'Sin observaciones.';
       document.getElementById("modalFicha").classList.remove("hidden");
     }
 
