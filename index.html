@@ -1,275 +1,260 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Matriculación y Proyección 2026/2027</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión Escuela - REMA</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-100 min-h-screen text-slate-800 font-sans">
 
-    <!-- Encabezado Principal -->
-    <header class="bg-indigo-900 text-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight">Gestión de Matriculación 2026 / 2027</h1>
-                <p class="text-indigo-200 text-sm mt-1">Seguimiento de inscriptos, no inscriptos y lista de espera</p>
-            </div>
-            <div class="flex items-center space-x-2 bg-indigo-800 px-3 py-1.5 rounded-lg text-xs font-medium">
-                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-indigo-300"></i>
-                <span>Copia de 2027 Inscriptos _ NO inscriptos.xlsx</span>
-            </div>
-        </div>
-    </header>
+  <div class="max-w-7xl mx-auto p-4 sm:p-6">
+    
+    <!-- Pestañas de Navegación -->
+    <div class="flex border-b border-slate-300 mb-6 bg-white rounded-t-lg px-4 pt-2 shadow-sm">
+      <button id="tab-rema7" onclick="cambiarTab('7')" class="py-3 px-6 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 focus:outline-none transition">
+        REMA 7°
+      </button>
+      <button id="tab-rema1a4" onclick="cambiarTab('1a4')" class="py-3 px-6 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 focus:outline-none transition">
+        REMA DE 1 A 4
+      </button>
+    </div>
 
-    <!-- Contenido Principal -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-        
-        <!-- Tarjetas de Resumen General (Métricas) -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-            <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total REMA 7°</p>
-                    <p class="text-2xl font-bold text-slate-800 mt-1" id="kpi-rema7">0</p>
-                    <p class="text-xs text-emerald-600 mt-1 font-medium" id="sub-rema7">0 Confirmados</p>
-                </div>
-                <div class="bg-indigo-50 p-3 rounded-lg text-indigo-600">
-                    <i data-lucide="users" class="w-6 h-6"></i>
-                </div>
-            </div>
+    <!-- Panel de Estadísticas Dinámicas -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Alumnos</p>
+        <p id="stat-total" class="text-2xl font-bold text-slate-800 mt-1">0</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pendientes de Pago</p>
+        <p id="stat-pendientes" class="text-2xl font-bold text-amber-600 mt-1">0</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Turno Mañana</p>
+        <p id="stat-tm" class="text-2xl font-bold text-indigo-600 mt-1">0</p>
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200">
+        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Turno Tarde</p>
+        <p id="stat-tt" class="text-2xl font-bold text-emerald-600 mt-1">0</p>
+      </div>
+    </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total REMA 1° a 4°</p>
-                    <p class="text-2xl font-bold text-slate-800 mt-1" id="kpi-rema14">0</p>
-                    <p class="text-xs text-emerald-600 mt-1 font-medium" id="sub-rema14">0 Matriculados con pago</p>
-                </div>
-                <div class="bg-emerald-50 p-3 rounded-lg text-emerald-600">
-                    <i data-lucide="user-check" class="w-6 h-6"></i>
-                </div>
-            </div>
+    <!-- Filtros de Búsqueda -->
+    <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row gap-3">
+      <div class="flex-1">
+        <input type="text" id="filter-search" oninput="renderizarTabla()" placeholder="Buscar por alumno o código..." class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+      </div>
+      <div class="w-full md:w-48">
+        <select id="filter-curso" onchange="renderizarTabla()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          <option value="">Todos los Cursos</option>
+        </select>
+      </div>
+      <div class="w-full md:w-48">
+        <select id="filter-turno" onchange="renderizarTabla()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          <option value="">Todos los Turnos</option>
+          <option value="TM">TM</option>
+          <option value="TT">TT</option>
+          <option value="Sin Asignar">Sin Asignar</option>
+        </select>
+      </div>
+      <div class="w-full md:w-48">
+        <select id="filter-estado" onchange="renderizarTabla()" class="w-full px-3 py-2 border border-slate-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+          <option value="">Todos los Estados</option>
+          <option value="Pendiente">Pendiente</option>
+          <option value="Confirmado">Confirmado</option>
+        </select>
+      </div>
+    </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Nuevos Inscriptos</p>
-                    <p class="text-2xl font-bold text-slate-800 mt-1" id="kpi-nuevos">0</p>
-                    <p class="text-xs text-indigo-600 mt-1 font-medium">Ingresos 2026/2027</p>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-lg text-blue-600">
-                    <i data-lucide="user-plus" class="w-6 h-6"></i>
-                </div>
-            </div>
+    <!-- Tabla Principal -->
+    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+          <tr>
+            <th class="py-3 px-4">Código</th>
+            <th class="py-3 px-4">Alumno</th>
+            <th class="py-3 px-4">Curso</th>
+            <th class="py-3 px-4">Pago</th>
+            <th class="py-3 px-4">Estado</th>
+            <th class="py-3 px-4">Turno</th>
+            <th class="py-3 px-4">Observaciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body" class="divide-y divide-slate-100">
+          <tr>
+            <td colspan="7" class="py-8 text-center text-slate-400">Cargando datos...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-            <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pendientes / No Matriculados</p>
-                    <p class="text-2xl font-bold text-amber-600 mt-1" id="kpi-pendientes">0</p>
-                    <p class="text-xs text-slate-500 mt-1 font-medium">En seguimiento REMA 7°</p>
-                </div>
-                <div class="bg-amber-50 p-3 rounded-lg text-amber-600">
-                    <i data-lucide="clock" class="w-6 h-6"></i>
-                </div>
-            </div>
-        </section>
+  </div>
 
-        <!-- Filtros y Búsqueda -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <nav class="flex space-x-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0" id="tabs-container">
-                <button class="tab-btn active bg-indigo-50 text-indigo-700 px-4 py-2 rounded-lg text-sm font-semibold border border-indigo-200" data-tab="rema7">
-                    REMA 7°
-                </button>
-                <button class="tab-btn text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-lg text-sm font-medium" data-tab="rema14">
-                    REMA 1° a 4°
-                </button>
-                <button class="tab-btn text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-lg text-sm font-medium" data-tab="nuevos">
-                    NUEVOS 2026/2027
-                </button>
-                <button class="tab-btn text-slate-600 hover:bg-slate-100 px-4 py-2 rounded-lg text-sm font-medium" data-tab="bajas">
-                    BAJAS
-                </button>
-            </nav>
+  <script>
+    // URL del Google Sheet publicado en formato CSV
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR.../pub?output=csv'; // Reemplazar con tu URL de CSV
 
-            <div class="relative w-full sm:w-64">
-                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="search-input" placeholder="Buscar alumno..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            </div>
-        </div>
+    let todosLosAlumnos = [];
+    let tabActual = '7';
 
-        <!-- Tabla de Datos -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-600" id="data-table">
-                    <thead class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200 uppercase text-xs tracking-wider" id="table-head">
-                    </thead>
-                    <tbody class="divide-y divide-slate-200" id="table-body">
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
-                <span id="record-count">Cargando registros...</span>
-                <span>Datos sincronizados desde planilla Excel</span>
-            </div>
-        </div>
+    // Normalizador de texto para búsquedas sin acentos
+    const normalizar = (txt) => (txt || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-    </main>
-
-    <!-- Archivo de Datos Sincronizado -->
-    <script src="datos.js"></script>
-
-    <script>
-        lucide.createIcons();
-
-        let currentTab = 'rema7';
-        let searchQuery = '';
-
-        // Estructuras de encabezados según pestaña
-        const columnsConfig = {
-            rema7: [
-                { key: 'CODIGO', label: 'Código' },
-                { key: 'NOMBRE', label: 'Nombre y Apellido' },
-                { key: 'GRADO_ACTUAL', label: 'Grado' },
-                { key: 'PAGO', label: 'Pagó' },
-                { key: 'ESTADO', label: 'Estado' },
-                { key: 'TURNO', label: 'Turno' },
-                { key: 'OBSERVACIONES', label: 'Observaciones' }
-            ],
-            rema14: [
-                { key: 'CITADE', label: 'Citade' },
-                { key: 'NOMBRE', label: 'Nombre y Apellido' },
-                { key: 'CURSO_2026', label: 'Curso 2026' },
-                { key: 'CURSO_INSC', label: 'Curso Insc.' },
-                { key: 'RESPUESTA', label: 'Respuesta' },
-                { key: 'PAGO', label: 'Pagó' },
-                { key: 'OBSERVACIONES', label: 'Observaciones' }
-            ],
-            nuevos: [
-                { key: 'N', label: 'N°' },
-                { key: 'CODIGO', label: 'Código' },
-                { key: 'INSCRIPTOS', label: 'Inscripto' },
-                { key: 'INSCRIPCION', label: 'Fecha Inscripción' },
-                { key: 'INGRESO', label: 'Fecha Ingreso' },
-                { key: 'GRADO', label: 'Grado' },
-                { key: 'CURSO_INSC', label: 'Curso' }
-            ],
-            bajas: [
-                { key: 'CITADE', label: 'Citade' },
-                { key: 'NOMBRE', label: 'Nombre y Apellido' },
-                { key: 'INFO_BAJA', label: 'Información Baja' },
-                { key: 'FECHA', label: 'Fecha' },
-                { key: 'ESTRATEGIA', label: 'Estrategia' }
-            ]
-        };
-
-        function updateKPIs() {
-            if (typeof excelData === 'undefined') return;
-
-            const rema7Data = excelData.rema7 || [];
-            const rema14Data = excelData.rema14 || [];
-            const nuevosData = excelData.nuevos || [];
-
-            document.getElementById('kpi-rema7').textContent = rema7Data.length;
-            const rema7Confirmados = rema7Data.filter(r => r.ESTADO === 'CONFIRMADO').length;
-            document.getElementById('sub-rema7').textContent = `${rema7Confirmados} Confirmados`;
-
-            document.getElementById('kpi-rema14').textContent = rema14Data.length;
-            const rema14Pagados = rema14Data.filter(r => r.PAGO === 'SI').length;
-            document.getElementById('sub-rema14').textContent = `${rema14Pagados} Matriculados con pago`;
-
-            document.getElementById('kpi-nuevos').textContent = nuevosData.length;
-
-            const rema7Pendientes = rema7Data.filter(r => r.ESTADO === 'PENDIENTE' || r.ESTADO === 'NO MATRICULA').length;
-            document.getElementById('kpi-pendientes').textContent = rema7Pendientes;
+    function cargarDatos() {
+      // Si usas CSV en directo de Google Sheets:
+      Papa.parse(SHEET_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          procesarYLimpiarDatos(results.data);
+        },
+        error: function() {
+          // Si no hay URL configurada se cargan datos de respaldo/ejemplo
+          cargarDatosEjemplo();
         }
+      });
+    }
 
-        function renderTable() {
-            if (typeof excelData === 'undefined') return;
+    function procesarYLimpiarDatos(data) {
+      todosLosAlumnos = data
+        .map((row) => {
+          // Mapeo corregido según posición exacta de campos
+          const codigo = (row['Código'] || row['codigo'] || '').toString().trim();
+          const alumno = (row['Alumno'] || row['alumno'] || row['Nombre'] || '').toString().trim();
+          const curso = (row['Curso'] || row['curso'] || '').toString().trim();
+          const pago = (row['Pago'] || row['pago'] || 'NO').toString().trim().toUpperCase();
+          const estado = (row['Estado'] || row['estado'] || 'Pendiente').toString().trim();
+          const turno = (row['Turno'] || row['turno'] || 'Sin Asignar').toString().trim();
+          const obs = (row['Observaciones'] || row['observaciones'] || '-').toString().trim();
 
-            const tableHead = document.getElementById('table-head');
-            const tableBody = document.getElementById('table-body');
-            const recordCount = document.getElementById('record-count');
+          return { codigo, alumno, curso, pago, estado, turno, obs };
+        })
+        .filter((item) => {
+          // FILTRO ANTI-DESFASAJE Y RESÚMENES:
+          // Elimina filas donde "alumno" sea un número aislado (cantidades totales) o porcentajes (70%, 61%, etc.)
+          const esNumeroSolo = /^\d+$/.test(item.alumno);
+          const esPorcentaje = /^\d+(\.\d+)?%$/.test(item.alumno);
+          const esAnoOFecha = /^(202[0-9]|viernes|lunes|martes|miércoles|jueves)/i.test(item.codigo);
 
-            const cols = columnsConfig[currentTab] || [];
-            const rawData = excelData[currentTab] || [];
+          return item.alumno !== '' && !esNumeroSolo && !esPorcentaje && !esAnoOFecha;
+        });
 
-            // Filtrar datos por búsqueda
-            const filteredData = rawData.filter(row => {
-                const name = (row.NOMBRE || row.INSCRIPTOS || '').toLowerCase();
-                return name.includes(searchQuery.toLowerCase());
-            });
+      actualizarFiltrosCurso();
+      renderizarTabla();
+    }
 
-            // Construir Thead
-            let headHtml = '<tr class="bg-slate-100 border-b border-slate-200">';
-            cols.forEach(col => {
-                headHtml += `<th class="px-6 py-3 text-left font-bold text-slate-700">${col.label}</th>`;
-            });
-            headHtml += '</tr>';
-            tableHead.innerHTML = headHtml;
+    function cargarDatosEjemplo() {
+      // Datos de prueba limpios para verificación de estructura
+      const rawMock = [
+        { "Código": "701", "Alumno": "Álvarez, Mateo", "Curso": "7° A", "Pago": "NO", "Estado": "Pendiente", "Turno": "TM", "Observaciones": "-" },
+        { "Código": "702", "Alumno": "Benítez, Sofia", "Curso": "7° B", "Pago": "SI", "Estado": "Confirmado", "Turno": "TT", "Observaciones": "-" },
+        { "Código": "101", "Alumno": "Gómez, Lucas", "Curso": "1° A", "Pago": "NO", "Estado": "Pendiente", "Turno": "TM", "Observaciones": "-" },
+        { "Código": "201", "Alumno": "López, Martina", "Curso": "2° B", "Pago": "SI", "Estado": "Confirmado", "Turno": "TT", "Observaciones": "-" },
+        { "Código": "2023", "Alumno": "70%", "Curso": "3° A", "Pago": "NO", "Estado": "Pendiente", "Turno": "Sin Asignar", "Observaciones": "-" } // Fila basura que será descartada
+      ];
+      procesarYLimpiarDatos(rawMock);
+    }
 
-            // Construir Tbody
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="${cols.length}" class="px-6 py-8 text-center text-slate-400 font-medium">No se encontraron registros.</td></tr>`;
-                recordCount.textContent = 'Mostrando 0 de 0 registros';
-                return;
-            }
+    function cambiarTab(tab) {
+      tabActual = tab;
+      
+      const btn7 = document.getElementById('tab-rema7');
+      const btn1a4 = document.getElementById('tab-rema1a4');
 
-            let bodyHtml = '';
-            filteredData.forEach(row => {
-                bodyHtml += '<tr class="hover:bg-slate-50 transition-colors">';
-                cols.forEach(col => {
-                    let val = row[col.key] || '-';
-                    
-                    // Formato visual para estados y pagos
-                    if (col.key === 'ESTADO') {
-                        if (val === 'CONFIRMADO') val = `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full text-xs font-semibold">CONFIRMADO</span>`;
-                        else if (val === 'PENDIENTE') val = `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full text-xs font-semibold">PENDIENTE</span>`;
-                        else if (val === 'NO MATRICULA') val = `<span class="bg-rose-100 text-rose-800 px-2.5 py-1 rounded-full text-xs font-semibold">NO MATRICULA</span>`;
-                    }
-                    if (col.key === 'PAGO' || col.key === 'RESPUESTA') {
-                        if (val === 'SI') val = `<span class="text-emerald-600 font-semibold">SÍ</span>`;
-                        else if (val === 'NO') val = `<span class="text-rose-600 font-semibold">NO</span>`;
-                    }
+      if (tab === '7') {
+        btn7.className = "py-3 px-6 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 focus:outline-none transition";
+        btn1a4.className = "py-3 px-6 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 focus:outline-none transition";
+      } else {
+        btn1a4.className = "py-3 px-6 text-sm font-semibold border-b-2 border-indigo-600 text-indigo-600 focus:outline-none transition";
+        btn7.className = "py-3 px-6 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 focus:outline-none transition";
+      }
 
-                    bodyHtml += `<td class="px-6 py-4 whitespace-nowrap">${val}</td>`;
-                });
-                bodyHtml += '</tr>';
-            });
+      actualizarFiltrosCurso();
+      renderizarTabla();
+    }
 
-            tableBody.innerHTML = bodyHtml;
-            recordCount.textContent = `Mostrando ${filteredData.length} de ${rawData.length} registros`;
+    function obtenerAlumnosPestañaActual() {
+      return todosLosAlumnos.filter((a) => {
+        const c = a.curso.toLowerCase();
+        if (tabActual === '7') {
+          return c.includes('7');
+        } else {
+          return c.includes('1') || c.includes('2') || c.includes('3') || c.includes('4');
         }
+      });
+    }
 
-        // Eventos de Pestañas
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.tab-btn').forEach(b => {
-                    b.classList.remove('bg-indigo-50', 'text-indigo-700', 'font-semibold', 'border', 'border-indigo-200');
-                    b.classList.add('text-slate-600', 'hover:bg-slate-100');
-                });
-                
-                const target = e.target.closest('button');
-                target.classList.add('bg-indigo-50', 'text-indigo-700', 'font-semibold', 'border', 'border-indigo-200');
-                target.classList.remove('text-slate-600', 'hover:bg-slate-100');
+    function actualizarFiltrosCurso() {
+      const select = document.getElementById('filter-curso');
+      const base = obtenerAlumnosPestañaActual();
+      const cursosUnicos = [...new Set(base.map(a => a.curso))].sort();
 
-                currentTab = target.getAttribute('data-tab');
-                renderTable();
-            });
-        });
+      select.innerHTML = '<option value="">Todos los Cursos</option>';
+      cursosUnicos.forEach(c => {
+        if (c) select.innerHTML += `<option value="${c}">${c}</option>`;
+      });
+    }
 
-        // Evento de Búsqueda
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            searchQuery = e.target.value;
-            renderTable();
-        });
+    function renderizarTabla() {
+      const search = normalizar(document.getElementById('filter-search').value);
+      const curso = document.getElementById('filter-curso').value;
+      const turno = document.getElementById('filter-turno').value;
+      const estado = document.getElementById('filter-estado').value;
 
-        // Inicialización
-        document.addEventListener('DOMContentLoaded', () => {
-            updateKPIs();
-            renderTable();
-        });
-    </script>
+      const basePestaña = obtenerAlumnosPestañaActual();
+
+      const filtrados = basePestaña.filter((a) => {
+        const matchSearch = normalizar(a.alumno).includes(search) || normalizar(a.codigo).includes(search);
+        const matchCurso = curso === '' || a.curso === curso;
+        const matchTurno = turno === '' || a.turno === turno;
+        const matchEstado = estado === '' || a.estado === estado;
+
+        return matchSearch && matchCurso && matchTurno && matchEstado;
+      });
+
+      // Actualización del Panel Estadístico
+      document.getElementById('stat-total').innerText = filtrados.length;
+      document.getElementById('stat-pendientes').innerText = filtrados.filter(a => a.pago === 'NO' || a.estado === 'Pendiente').length;
+      document.getElementById('stat-tm').innerText = filtrados.filter(a => a.turno === 'TM' || a.turno.toLowerCase().includes('mañana')).length;
+      document.getElementById('stat-tt').innerText = filtrados.filter(a => a.turno === 'TT' || a.turno.toLowerCase().includes('tarde')).length;
+
+      // Renderizado del Body
+      const tbody = document.getElementById('tabla-body');
+      tbody.innerHTML = '';
+
+      if (filtrados.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="py-6 text-center text-slate-400">No se encontraron registros.</td></tr>';
+        return;
+      }
+
+      filtrados.forEach((a) => {
+        const badgePago = a.pago === 'SI' 
+          ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">SI</span>'
+          : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-rose-100 text-rose-800">NO</span>';
+
+        const badgeEstado = a.estado === 'Confirmado'
+          ? '<span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Confirmado</span>'
+          : '<span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-800">Pendiente</span>';
+
+        tbody.innerHTML += `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4 font-mono text-xs text-slate-500">${a.codigo || '-'}</td>
+            <td class="py-3 px-4 font-semibold text-slate-900">${a.alumno}</td>
+            <td class="py-3 px-4">${a.curso}</td>
+            <td class="py-3 px-4">${badgePago}</td>
+            <td class="py-3 px-4">${badgeEstado}</td>
+            <td class="py-3 px-4 text-slate-600">${a.turno}</td>
+            <td class="py-3 px-4 text-slate-500 text-xs">${a.obs}</td>
+          </tr>
+        `;
+      });
+    }
+
+    // Inicialización al cargar página
+    window.onload = cargarDatos;
+  </script>
 </body>
 </html>
