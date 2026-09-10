@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Colegio Esteban Echeverría - Control de Matriculación</title>
   
-  <!-- CSS Bootstrap 5 & Iconos -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
@@ -13,7 +12,6 @@
     :root {
       --primary-teal: #3EB5AD;
       --primary-dark: #11232C;
-      --accent-yellow: #FFE049;
       --bg-body: #F4F7F6;
       --badge-danger-bg: #FFE6E6;
       --badge-danger-text: #D32F2F;
@@ -31,14 +29,13 @@
       border-bottom: 2px solid #E2E8F0;
       padding: 12px 24px;
     }
-
     .brand-shield {
       height: 52px;
       width: auto;
       object-fit: contain;
     }
 
-    /* Tarjetas Estadísticas Superiores */
+    /* Tarjetas Métricas */
     .stat-card {
       background: #FFFFFF;
       border-radius: 12px;
@@ -46,10 +43,7 @@
       border: 1px solid #E2E8F0;
       box-shadow: 0 2px 6px rgba(0,0,0,0.02);
     }
-    .stat-card .stat-icon {
-      font-size: 1.8rem;
-      opacity: 0.85;
-    }
+    .stat-card .stat-icon { font-size: 1.8rem; opacity: 0.85; }
 
     /* Pestañas */
     .nav-tabs-custom {
@@ -68,15 +62,13 @@
       color: #64748B;
       border-bottom: 3px solid transparent;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
-    .tab-btn:hover { color: var(--primary-teal); }
     .tab-btn.active {
       color: var(--primary-teal);
       border-bottom-color: var(--primary-teal);
     }
 
-    /* Tablas y Badges */
+    /* Tabla y Badges */
     .main-card {
       background: #FFFFFF;
       border-radius: 12px;
@@ -95,6 +87,27 @@
       border: none;
     }
 
+    /* Badges de Turno */
+    .badge-turno-manana {
+      background-color: #E3F2FD;
+      color: #0D47A1;
+      border: 1px solid #BBDEFB;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .badge-turno-tarde {
+      background-color: #FFF3E0;
+      color: #E65100;
+      border: 1px solid #FFE0B2;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    /* Badge de Estado Baja */
     .badge-no-matricula {
       display: inline-block !important;
       white-space: normal !important;
@@ -104,7 +117,6 @@
       border-radius: 8px !important;
       font-size: 0.78rem !important;
       font-weight: 700 !important;
-      line-height: 1.2 !important;
       text-align: center !important;
       background-color: var(--badge-danger-bg) !important;
       color: var(--badge-danger-text) !important;
@@ -114,10 +126,9 @@
 </head>
 <body>
 
-  <!-- ENCABEZADO CON ESCUDO EN PALETA OFICIAL -->
+  <!-- ENCABEZADO -->
   <header class="header-bar d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center gap-3">
-      <!-- Muestra el escudo si existe ESCUDO.png, de lo contrario muestra ícono de resguardo -->
       <img src="ESCUDO.png" alt="Escudo Colegio Esteban Echeverría" class="brand-shield" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=E+E&background=3EB5AD&color=fff&size=128';">
       <div>
         <h1 class="h5 m-0 fw-bold" style="color: var(--primary-dark);">Colegio Esteban Echeverría</h1>
@@ -128,13 +139,13 @@
       <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill" id="syncStatus">
         <i class="bi bi-check-circle-fill me-1"></i> Sincronizado
       </span>
-      <button class="btn btn-sm btn-outline-secondary" onclick="sincronizarDatos()"><i class="bi bi-arrow-repeat"></i> Actualizar</button>
+      <button class="btn btn-sm btn-outline-secondary" onclick="location.reload()"><i class="bi bi-arrow-repeat"></i> Actualizar</button>
     </div>
   </header>
 
   <main class="container-fluid p-4">
 
-    <!-- DASHBOARD GENERAL / ESTADÍSTICAS SUPERIORES -->
+    <!-- MÉTRICAS SUPERIORES -->
     <section class="row g-3 mb-4">
       <div class="col-md-3">
         <div class="stat-card d-flex align-items-center justify-content-between">
@@ -174,7 +185,7 @@
       </div>
     </section>
 
-    <!-- NAVEGACIÓN DE PESTAÑAS -->
+    <!-- PESTAÑAS DE HOJAS -->
     <nav class="nav-tabs-custom mb-3 rounded-top">
       <button class="tab-btn active" onclick="seleccionarPestana('REMA 7°', this)">🎓 REMA 7° Grado</button>
       <button class="tab-btn" onclick="seleccionarPestana('REMA DE 1 A 4', this)">👥 REMA 1° a 4° Año</button>
@@ -182,24 +193,36 @@
       <button class="tab-btn" onclick="seleccionarPestana('SINTESIS PRE PLANTA NOVIEMBRE', this)">📊 Pre-Planta Orgánica</button>
     </nav>
 
-    <!-- FILTROS -->
+    <!-- PANEL DE FILTROS POR CURSO, TURNO Y ESTADO -->
     <div class="bg-white p-3 rounded border mb-3 shadow-sm">
       <div class="row g-3">
-        <div class="col-md-5">
+        <div class="col-md-4">
           <input type="text" id="searchInput" class="form-control" placeholder="Buscar por Nombre, Apellido o CÓDIGO..." onkeyup="filtrarTabla()">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2.5">
+          <select id="cursoSelect" class="form-select" onchange="filtrarTabla()">
+            <option value="">Todos los Cursos</option>
+          </select>
+        </div>
+        <div class="col-md-2.5">
+          <select id="turnoSelect" class="form-select" onchange="filtrarTabla()">
+            <option value="">Todos los Turnos</option>
+            <option value="Mañana">Mañana</option>
+            <option value="Tarde">Tarde</option>
+          </select>
+        </div>
+        <div class="col-md-3">
           <select id="estadoSelect" class="form-select" onchange="filtrarTabla()">
             <option value="">Todos los Estados</option>
-            <option value="SI">Confirmado / Sí</option>
-            <option value="NO">Pendiente / No Pago</option>
-            <option value="NO MATRICULA">No Matricula / Baja</option>
+            <option value="Confirmado">Confirmado</option>
+            <option value="Pendiente">Pendiente</option>
+            <option value="No Matricula / Baja">No Matricula / Baja</option>
           </select>
         </div>
       </div>
     </div>
 
-    <!-- TABLA DE ALUMNOS -->
+    <!-- TABLA PRINCIPAL DE REGISTROS -->
     <div class="main-card">
       <div class="table-responsive">
         <table class="table table-hover table-custom m-0">
@@ -210,30 +233,28 @@
               <th>GRADO / CURSO</th>
               <th class="text-center">PAGO</th>
               <th class="text-center">ESTADO</th>
-              <th>TURNO / DETALLE</th>
+              <th class="text-center">TURNO</th>
               <th>OBSERVACIONES</th>
               <th class="text-center">FICHA</th>
             </tr>
           </thead>
           <tbody id="tablaBody">
-            <!-- Cargado dinámicamente -->
+            <!-- Inyectado por JS -->
           </tbody>
         </table>
       </div>
     </div>
   </main>
 
-  <!-- MODAL FICHA INDIVIDUAL DE ALUMNO -->
+  <!-- MODAL DE FICHA INDIVIDUAL -->
   <div class="modal fade" id="fichaModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header" style="background-color: var(--primary-dark); color: white;">
-          <h5 class="modal-title"><i class="bi bi-person-lines-fill me-2"></i>Ficha Institucional de Alumno</h5>
+          <h5 class="modal-title"><i class="bi bi-person-badge me-2"></i>Ficha Institucional de Alumno</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="fichaContent">
-          <!-- Detalle inyectado vía JS -->
-        </div>
+        <div class="modal-body" id="fichaContent"></div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
@@ -241,34 +262,18 @@
     </div>
   </div>
 
-  <!-- JS Bootstrap & Script Principal -->
+  <!-- Carga del JS de datos y Bootstrap -->
+  <script src="datos.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <script>
-    // URL CSV Google Sheet o Base Integrada de Datos
-    const baseDatos = {
-      'REMA 7°': [
-        { codigo: 'CO VPR M 7 A', alumno: 'Amante, Shanti Maylen', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matrícula contado Junio' },
-        { codigo: 'CO VPR M 7 A', alumno: 'Anacondio, Matteo Dario', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matrícula contado Junio' },
-        { codigo: 'CO VPR M 7 A', alumno: 'Baamonde, Nael', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matrícula contado Junio' },
-        { codigo: 'CO VPR M 7 A', alumno: 'Bevilacqua, Nina', curso: '7° A', pago: 'NO', estado: 'No Matricula / Baja', turno: 'NO MATRICULA', obs: 'No continúa ya que prioriza otra propuesta' },
-        { codigo: 'CO VPR M 7 A', alumno: 'Bonazzi, Dellfina Emma', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matrícula contado Junio' }
-      ],
-      'REMA DE 1 A 4': [
-        { codigo: 'CO VSE M 1 BEA', alumno: 'Alonso, Thiago', curso: '1° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matriculado' },
-        { codigo: 'CO VSE M 1 BEA', alumno: 'Amaya Chaparro, Ian Lucas', curso: '1° Lab 1', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matriculado' },
-        { codigo: 'CO VSE M 1 BCB', alumno: 'Cantatore Ruge, Antonella', curso: '1° B', pago: 'NO', estado: 'Pendiente', turno: '2° B', obs: 'MOROSIDAD' }
-      ],
-      'NUEVOS 20262027': [],
-      'SINTESIS PRE PLANTA NOVIEMBRE': []
-    };
 
+  <script>
     let pestanaActual = 'REMA 7°';
     let modalFicha;
 
     document.addEventListener('DOMContentLoaded', () => {
       modalFicha = new bootstrap.Modal(document.getElementById('fichaModal'));
       actualizarEstadisticasGenerales();
+      poblarDesplegableCursos();
       cargarTabla(baseDatos[pestanaActual]);
     });
 
@@ -280,7 +285,7 @@
           total++;
           const est = (item.estado || '').toLowerCase();
           if (est.includes('no matricula') || est.includes('baja')) bajas++;
-          else if (est.includes('confirmado') || item.pago === 'SI') confirmados++;
+          else if (est.includes('confirmado')) confirmados++;
           else pendientes++;
         });
       });
@@ -291,10 +296,24 @@
       document.getElementById('statBajas').innerText = bajas;
     }
 
+    function poblarDesplegableCursos() {
+      const select = document.getElementById('cursoSelect');
+      select.innerHTML = '<option value="">Todos los Cursos</option>';
+      
+      const cursos = new Set();
+      const lista = baseDatos[pestanaActual] || [];
+      lista.forEach(i => { if(i.curso) cursos.add(i.curso); });
+
+      Array.from(cursos).sort().forEach(c => {
+        select.innerHTML += `<option value="${c}">${c}</option>`;
+      });
+    }
+
     function seleccionarPestana(nombre, btn) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       if(btn) btn.classList.add('active');
       pestanaActual = nombre;
+      poblarDesplegableCursos();
       cargarTabla(baseDatos[nombre] || []);
     }
 
@@ -303,18 +322,18 @@
       tbody.innerHTML = '';
 
       if (!datos || datos.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">Sin registros disponibles para esta pestaña.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">Sin registros disponibles.</td></tr>`;
         return;
       }
 
-      datos.forEach((item, index) => {
+      datos.forEach((item) => {
         const tr = document.createElement('tr');
         const est = (item.estado || '').toLowerCase();
 
         let badgeEstado = '<span class="badge bg-secondary">Pendiente</span>';
         if (est.includes('no matricula') || est.includes('baja')) {
           badgeEstado = '<span class="badge-no-matricula">No Matricula / Baja</span>';
-        } else if (est.includes('confirmado') || item.pago === 'SI') {
+        } else if (est.includes('confirmado')) {
           badgeEstado = '<span class="badge bg-success-subtle text-success border border-success px-2 py-1 rounded-pill">🟢 Confirmado</span>';
         } else {
           badgeEstado = '<span class="badge bg-warning-subtle text-dark border border-warning px-2 py-1 rounded-pill">🟠 Pendiente</span>';
@@ -324,13 +343,21 @@
           ? '<span class="badge bg-success-subtle text-success border border-success">SI</span>'
           : '<span class="badge bg-danger-subtle text-danger border border-danger">NO</span>';
 
+        // Diferenciación de Colores para el Turno
+        let badgeTurno = '<span class="text-muted small">Sin Asignar</span>';
+        if (item.turno === 'Mañana') {
+          badgeTurno = '<span class="badge-turno-manana"><i class="bi bi-sun-fill text-warning me-1"></i>Mañana</span>';
+        } else if (item.turno === 'Tarde') {
+          badgeTurno = '<span class="badge-turno-tarde"><i class="bi bi-moon-stars-fill text-danger me-1"></i>Tarde</span>';
+        }
+
         tr.innerHTML = `
           <td class="text-secondary small fw-bold">${item.codigo || '-'}</td>
           <td class="fw-bold">${item.alumno}</td>
           <td>${item.curso}</td>
           <td class="text-center">${badgePago}</td>
           <td class="text-center">${badgeEstado}</td>
-          <td class="fw-semibold">${item.turno}</td>
+          <td class="text-center">${badgeTurno}</td>
           <td class="text-muted small">${item.obs || '-'}</td>
           <td class="text-center">
             <button class="btn btn-sm btn-outline-primary" onclick='abrirFicha(${JSON.stringify(item)})'>
@@ -346,58 +373,58 @@
       const content = document.getElementById('fichaContent');
       content.innerHTML = `
         <div class="mb-3 border-bottom pb-2">
-          <h6 class="text-muted mb-1">CÓDIGO INSTITUCIONAL</h6>
-          <p class="fw-bold m-0">${alumno.codigo || 'N/A'}</p>
+          <small class="text-muted d-block">CÓDIGO INSTITUCIONAL</small>
+          <strong class="fs-6">${alumno.codigo || 'N/A'}</strong>
         </div>
         <div class="mb-3 border-bottom pb-2">
-          <h6 class="text-muted mb-1">ALUMNO</h6>
-          <p class="fs-5 fw-bold text-primary m-0">${alumno.alumno}</p>
+          <small class="text-muted d-block">NOMBRE Y APELLIDO</small>
+          <span class="fs-5 fw-bold text-primary">${alumno.alumno}</span>
         </div>
-        <div class="row mb-3">
+        <div class="row mb-3 border-bottom pb-2">
           <div class="col-6">
-            <h6 class="text-muted mb-1">CURSO / GRADO</h6>
-            <p class="fw-semibold m-0">${alumno.curso}</p>
+            <small class="text-muted d-block">CURSO / GRADO</small>
+            <strong>${alumno.curso}</strong>
           </div>
           <div class="col-6">
-            <h6 class="text-muted mb-1">ESTADO PAGO</h6>
-            <p class="fw-semibold m-0">${alumno.pago}</p>
+            <small class="text-muted d-block">TURNO</small>
+            <strong>${alumno.turno}</strong>
           </div>
         </div>
-        <div class="mb-3 border-bottom pb-2">
-          <h6 class="text-muted mb-1">ESTADO REGISTRADO</h6>
-          <p class="fw-bold m-0">${alumno.estado}</p>
+        <div class="row mb-3 border-bottom pb-2">
+          <div class="col-6">
+            <small class="text-muted d-block">MATRÍCULA PAGADA</small>
+            <strong>${alumno.pago}</strong>
+          </div>
+          <div class="col-6">
+            <small class="text-muted d-block">ESTADO</small>
+            <strong>${alumno.estado}</strong>
+          </div>
         </div>
         <div>
-          <h6 class="text-muted mb-1">OBSERVACIONES / SEC. DE INGRESOS</h6>
-          <p class="text-secondary m-0">${alumno.obs || 'Sin observaciones registradas.'}</p>
+          <small class="text-muted d-block">OBSERVACIONES / SEC. INGRESOS</small>
+          <p class="text-secondary m-0 mt-1">${alumno.obs || 'Sin observaciones cargadas.'}</p>
         </div>
       `;
       modalFicha.show();
     }
 
     function filtrarTabla() {
-      const text = document.getElementById('searchInput').value.toLowerCase();
-      const estadoFilter = document.getElementById('estadoSelect').value.toLowerCase();
+      const busqueda = document.getElementById('searchInput').value.toLowerCase();
+      const curso = document.getElementById('cursoSelect').value;
+      const turno = document.getElementById('turnoSelect').value;
+      const estado = document.getElementById('estadoSelect').value.toLowerCase();
 
-      const lista = baseDatos[pestanaActual] || [];
-      const filtrados = lista.filter(item => {
-        const matchText = item.alumno.toLowerCase().includes(text) || (item.codigo || '').toLowerCase().includes(text);
-        const matchEstado = !estadoFilter || item.estado.toLowerCase().includes(estadoFilter) || item.pago.toLowerCase().includes(estadoFilter);
-        return matchText && matchEstado;
+      const datos = baseDatos[pestanaActual] || [];
+      const filtrados = datos.filter(item => {
+        const coincideBusqueda = item.alumno.toLowerCase().includes(busqueda) || (item.codigo || '').toLowerCase().includes(busqueda);
+        const coincideCurso = !curso || item.curso === curso;
+        const coincideTurno = !turno || item.turno === turno;
+        const coincideEstado = !estado || item.estado.toLowerCase().includes(estado);
+
+        return coincideBusqueda && coincideCurso && coincideTurno && coincideEstado;
       });
 
       cargarTabla(filtrados);
-    }
-
-    function sincronizarDatos() {
-      const badge = document.getElementById('syncStatus');
-      badge.className = "badge bg-warning-subtle text-dark border border-warning px-3 py-2 rounded-pill";
-      badge.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Sincronizando...';
-
-      setTimeout(() => {
-        badge.className = "badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill";
-        badge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Sincronizado';
-      }, 800);
     }
   </script>
 </body>
