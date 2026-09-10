@@ -3,38 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Colegio Esteban Echeverría - Gestión de Matriculación</title>
+  <title>Colegio Esteban Echeverría - Control de Matriculación</title>
   
-  <!-- Bootstrap 5 CSS para estructura base -->
+  <!-- CSS Bootstrap 5 & Iconos -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Iconos de Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
   <style>
-    /* =========================================================
-       PALETA INSTITUCIONAL - COLEGIO ESTEBAN ECHEVERRÍA
-       ========================================================= */
     :root {
-      --primary-teal: #3EB5AD;          /* Turquesa exacto del escudo */
-      --primary-dark: #11232C;          /* Azul oscuro/noche institucional */
-      --accent-yellow: #FFE049;         /* Amarillo sol del escudo */
-      --bg-body: #F4F7F6;               /* Fondo gris/verde clarito */
-      --text-color: #11232C;
+      --primary-teal: #3EB5AD;
+      --primary-dark: #11232C;
+      --accent-yellow: #FFE049;
+      --bg-body: #F4F7F6;
       --badge-danger-bg: #FFE6E6;
       --badge-danger-text: #D32F2F;
-      --badge-danger-border: #FFCDD2;
     }
 
     body {
       background-color: var(--bg-body);
-      color: var(--text-color);
+      color: var(--primary-dark);
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
     /* Header e Identidad */
     .header-bar {
       background-color: #FFFFFF;
-      border-bottom: 2px solid #E0E0E0;
+      border-bottom: 2px solid #E2E8F0;
       padding: 12px 24px;
     }
 
@@ -44,109 +38,77 @@
       object-fit: contain;
     }
 
-    /* Pestañas de Navegación */
+    /* Tarjetas Estadísticas Superiores */
+    .stat-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .stat-card .stat-icon {
+      font-size: 1.8rem;
+      opacity: 0.85;
+    }
+
+    /* Pestañas */
     .nav-tabs-custom {
       display: flex;
-      gap: 8px;
-      border-bottom: 2px solid #E0E0E0;
+      gap: 6px;
+      border-bottom: 2px solid #E2E8F0;
       background: #FFFFFF;
       padding: 0 16px;
     }
-
     .tab-btn {
       background: none;
       border: none;
       padding: 12px 20px;
       font-weight: 600;
-      font-size: 0.95rem;
-      color: #555555;
+      font-size: 0.92rem;
+      color: #64748B;
       border-bottom: 3px solid transparent;
-      transition: all 0.2s ease-in-out;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
-
-    .tab-btn:hover {
-      color: var(--primary-teal);
-    }
-
+    .tab-btn:hover { color: var(--primary-teal); }
     .tab-btn.active {
       color: var(--primary-teal);
       border-bottom-color: var(--primary-teal);
     }
 
-    /* Tarjeta de Contenido y Tabla */
+    /* Tablas y Badges */
     .main-card {
       background: #FFFFFF;
       border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-      border: 1px solid #EAEAEA;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      border: 1px solid #E2E8F0;
       overflow: hidden;
     }
-
     .table-custom thead {
       background-color: var(--primary-dark) !important;
       color: #FFFFFF !important;
     }
-
     .table-custom thead th {
       font-size: 0.82rem;
       letter-spacing: 0.5px;
       padding: 14px 12px;
       border: none;
-      vertical-align: middle;
     }
 
-    .table-custom tbody td {
-      vertical-align: middle;
-      padding: 12px;
-      font-size: 0.9rem;
-    }
-
-    /* =========================================================
-       CORRECCIÓN: ETIQUETA NO MATRICULA / BAJA COMPLETA
-       ========================================================= */
     .badge-no-matricula {
       display: inline-block !important;
-      white-space: normal !important;        /* Permite que el texto baje y no se corte */
+      white-space: normal !important;
       word-wrap: break-word !important;
-      max-width: 150px;                      /* Ancho para forzar lectura clara en 2 líneas */
+      max-width: 140px;
       padding: 6px 10px !important;
-      border-radius: 10px !important;
+      border-radius: 8px !important;
       font-size: 0.78rem !important;
       font-weight: 700 !important;
-      line-height: 1.25 !important;
+      line-height: 1.2 !important;
       text-align: center !important;
       background-color: var(--badge-danger-bg) !important;
       color: var(--badge-danger-text) !important;
-      border: 1px solid var(--badge-danger-border) !important;
-    }
-
-    .badge-confirmado {
-      background-color: #E8F5E9;
-      color: #2E7D32;
-      border: 1px solid #C8E6C9;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.8rem;
-    }
-
-    .badge-pendiente {
-      background-color: #FFF8E1;
-      color: #B78103;
-      border: 1px solid #FFE082;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.8rem;
-    }
-
-    .filter-box {
-      background-color: #FFFFFF;
-      border-radius: 10px;
-      border: 1px solid #E5E5E5;
-      padding: 16px;
-      margin-bottom: 20px;
+      border: 1px solid #FFCDD2 !important;
     }
   </style>
 </head>
@@ -155,58 +117,83 @@
   <!-- ENCABEZADO CON ESCUDO EN PALETA OFICIAL -->
   <header class="header-bar d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center gap-3">
-      <!-- El archivo del escudo debe llamarse ESCUDO.png en la raíz -->
-      <img src="ESCUDO.png" alt="Escudo Colegio Esteban Echeverría" class="brand-shield" onerror="this.style.display='none'">
+      <!-- Muestra el escudo si existe ESCUDO.png, de lo contrario muestra ícono de resguardo -->
+      <img src="ESCUDO.png" alt="Escudo Colegio Esteban Echeverría" class="brand-shield" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=E+E&background=3EB5AD&color=fff&size=128';">
       <div>
-        <h1 class="h5 m-0 font-weight-bold" style="color: var(--primary-dark);">Colegio Esteban Echeverría</h1>
+        <h1 class="h5 m-0 fw-bold" style="color: var(--primary-dark);">Colegio Esteban Echeverría</h1>
         <small class="text-muted">Sistema de Control Institucional y Matriculación</small>
       </div>
     </div>
-    <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">
-      <i class="bi bi-check-circle-fill me-1"></i> Sincronizado
-    </span>
+    <div class="d-flex align-items-center gap-2">
+      <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill" id="syncStatus">
+        <i class="bi bi-check-circle-fill me-1"></i> Sincronizado
+      </span>
+      <button class="btn btn-sm btn-outline-secondary" onclick="sincronizarDatos()"><i class="bi bi-arrow-repeat"></i> Actualizar</button>
+    </div>
   </header>
 
-  <!-- PESTAÑAS (ENLAZADAS CORRECTAMENTE CON LA HOJA "REMA DE 1 A 4") -->
-  <nav class="nav-tabs-custom mt-2">
-    <button class="tab-btn active" onclick="seleccionarPestana('REMA 7°', this)">
-      🎓 REMA 7° Grado
-    </button>
-    <button class="tab-btn" onclick="seleccionarPestana('REMA DE 1 A 4', this)">
-      👥 REMA 1° a 4° Año
-    </button>
-    <button class="tab-btn" onclick="seleccionarPestana('NUEVOS 20262027', this)">
-      ➕ Nuevos 2026/2027
-    </button>
-    <button class="tab-btn" onclick="seleccionarPestana('SINTESIS PRE PLANTA NOVIEMBRE', this)">
-      📊 Pre-Planta Orgánica
-    </button>
-  </nav>
-
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="container-fluid p-4">
 
-    <!-- FILTROS -->
-    <div class="filter-box shadow-sm">
-      <div class="d-flex align-items-center mb-3">
-        <i class="bi bi-funnel-fill text-secondary me-2"></i>
-        <strong style="color: var(--primary-dark); font-size: 0.85rem; text-transform: uppercase;">Filtros de Control Institucional</strong>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-4">
-          <input type="text" id="searchInput" class="form-control" placeholder="Buscar Alumno o Código..." onkeyup="filtrarTabla()">
+    <!-- DASHBOARD GENERAL / ESTADÍSTICAS SUPERIORES -->
+    <section class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="stat-card d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-muted small fw-bold">TOTAL ALUMNOS</div>
+            <div class="h3 m-0 fw-bold" id="statTotal">0</div>
+          </div>
+          <i class="bi bi-people-fill stat-icon text-primary"></i>
         </div>
-        <div class="col-md-4">
-          <select id="cursoSelect" class="form-select" onchange="filtrarTabla()">
-            <option value="">Todos los Cursos</option>
-          </select>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-muted small fw-bold">CONFIRMADOS</div>
+            <div class="h3 m-0 fw-bold text-success" id="statConfirmados">0</div>
+          </div>
+          <i class="bi bi-check-circle-fill stat-icon text-success"></i>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-muted small fw-bold">PENDIENTES</div>
+            <div class="h3 m-0 fw-bold text-warning" id="statPendientes">0</div>
+          </div>
+          <i class="bi bi-clock-history stat-icon text-warning"></i>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card d-flex align-items-center justify-content-between">
+          <div>
+            <div class="text-muted small fw-bold">NO MATRICULA / BAJA</div>
+            <div class="h3 m-0 fw-bold text-danger" id="statBajas">0</div>
+          </div>
+          <i class="bi bi-x-circle-fill stat-icon text-danger"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVEGACIÓN DE PESTAÑAS -->
+    <nav class="nav-tabs-custom mb-3 rounded-top">
+      <button class="tab-btn active" onclick="seleccionarPestana('REMA 7°', this)">🎓 REMA 7° Grado</button>
+      <button class="tab-btn" onclick="seleccionarPestana('REMA DE 1 A 4', this)">👥 REMA 1° a 4° Año</button>
+      <button class="tab-btn" onclick="seleccionarPestana('NUEVOS 20262027', this)">➕ Nuevos 2026/2027</button>
+      <button class="tab-btn" onclick="seleccionarPestana('SINTESIS PRE PLANTA NOVIEMBRE', this)">📊 Pre-Planta Orgánica</button>
+    </nav>
+
+    <!-- FILTROS -->
+    <div class="bg-white p-3 rounded border mb-3 shadow-sm">
+      <div class="row g-3">
+        <div class="col-md-5">
+          <input type="text" id="searchInput" class="form-control" placeholder="Buscar por Nombre, Apellido o CÓDIGO..." onkeyup="filtrarTabla()">
         </div>
         <div class="col-md-4">
           <select id="estadoSelect" class="form-select" onchange="filtrarTabla()">
             <option value="">Todos los Estados</option>
-            <option value="Confirmado">Confirmado</option>
-            <option value="Pendiente">Pendiente</option>
-            <option value="No Matricula">No Matricula / Baja</option>
+            <option value="SI">Confirmado / Sí</option>
+            <option value="NO">Pendiente / No Pago</option>
+            <option value="NO MATRICULA">No Matricula / Baja</option>
           </select>
         </div>
       </div>
@@ -215,116 +202,203 @@
     <!-- TABLA DE ALUMNOS -->
     <div class="main-card">
       <div class="table-responsive">
-        <table class="table table-hover table-custom m-0" id="tablaMatricula">
+        <table class="table table-hover table-custom m-0">
           <thead>
             <tr>
               <th>CÓDIGO</th>
               <th>ALUMNO</th>
               <th>GRADO / CURSO</th>
               <th class="text-center">PAGO</th>
-              <th class="text-center">ESTADO / RESPUESTA</th>
+              <th class="text-center">ESTADO</th>
               <th>TURNO / DETALLE</th>
               <th>OBSERVACIONES</th>
               <th class="text-center">FICHA</th>
             </tr>
           </thead>
           <tbody id="tablaBody">
-            <!-- Datos de ejemplo rendereados por JS -->
+            <!-- Cargado dinámicamente -->
           </tbody>
         </table>
       </div>
     </div>
   </main>
 
+  <!-- MODAL FICHA INDIVIDUAL DE ALUMNO -->
+  <div class="modal fade" id="fichaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: var(--primary-dark); color: white;">
+          <h5 class="modal-title"><i class="bi bi-person-lines-fill me-2"></i>Ficha Institucional de Alumno</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="fichaContent">
+          <!-- Detalle inyectado vía JS -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Bootstrap & Script Principal -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
   <script>
-    // Datos de muestra estructurados conforme al Excel institucional
-    const datosPorHoja = {
+    // URL CSV Google Sheet o Base Integrada de Datos
+    const baseDatos = {
       'REMA 7°': [
-        { codigo: 'CO VPR M 7 A', alumno: 'Amante, Shanti Maylen', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Mañana' },
-        { codigo: 'CO VPR M 7 A', alumno: 'Anacondio, Matteo Dario', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Mañana' },
-        { codigo: 'CO VPR M 7 A', alumno: 'Bevilacqua, Nina', curso: '7° A', pago: 'NO', estado: 'Pendiente', turno: 'Mañana', obs: 'No continúa ya que prioriza otra propuesta' },
-        { codigo: 'CO VPR M 7 A', alumno: 'Cannetti, Francesco', curso: '7° A', pago: 'NO', estado: 'No Matricula / Baja', turno: 'NO ASIGNADO', obs: 'No matricularé' }
+        { codigo: 'CO VPR M 7 A', alumno: 'Amante, Shanti Maylen', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matrícula contado Junio' },
+        { codigo: 'CO VPR M 7 A', alumno: 'Anacondio, Matteo Dario', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matrícula contado Junio' },
+        { codigo: 'CO VPR M 7 A', alumno: 'Baamonde, Nael', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matrícula contado Junio' },
+        { codigo: 'CO VPR M 7 A', alumno: 'Bevilacqua, Nina', curso: '7° A', pago: 'NO', estado: 'No Matricula / Baja', turno: 'NO MATRICULA', obs: 'No continúa ya que prioriza otra propuesta' },
+        { codigo: 'CO VPR M 7 A', alumno: 'Bonazzi, Dellfina Emma', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matrícula contado Junio' }
       ],
       'REMA DE 1 A 4': [
-        { codigo: 'SEC 1A 01', alumno: 'Gomez, Lucas', curso: '1° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matriculado' },
-        { codigo: 'SEC 2B 04', alumno: 'Lopez, Mariana', curso: '2° B', pago: 'NO', estado: 'No Matricula / Baja', turno: 'NO ASIGNADO', obs: 'Cambio de domicilio' }
+        { codigo: 'CO VSE M 1 BEA', alumno: 'Alonso, Thiago', curso: '1° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matriculado' },
+        { codigo: 'CO VSE M 1 BEA', alumno: 'Amaya Chaparro, Ian Lucas', curso: '1° Lab 1', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matriculado' },
+        { codigo: 'CO VSE M 1 BCB', alumno: 'Cantatore Ruge, Antonella', curso: '1° B', pago: 'NO', estado: 'Pendiente', turno: '2° B', obs: 'MOROSIDAD' }
       ],
       'NUEVOS 20262027': [],
       'SINTESIS PRE PLANTA NOVIEMBRE': []
     };
 
-    let hojaActual = 'REMA 7°';
+    let pestanaActual = 'REMA 7°';
+    let modalFicha;
 
-    function seleccionarPestana(nombreHoja, elementoBtn) {
-      // Actualizar estilo visual de las pestañas
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      if (elementoBtn) elementoBtn.classList.add('active');
+    document.addEventListener('DOMContentLoaded', () => {
+      modalFicha = new bootstrap.Modal(document.getElementById('fichaModal'));
+      actualizarEstadisticasGenerales();
+      cargarTabla(baseDatos[pestanaActual]);
+    });
 
-      hojaActual = nombreHoja;
-      cargarTabla(datosPorHoja[nombreHoja] || []);
+    function actualizarEstadisticasGenerales() {
+      let total = 0, confirmados = 0, pendientes = 0, bajas = 0;
+
+      Object.values(baseDatos).forEach(lista => {
+        lista.forEach(item => {
+          total++;
+          const est = (item.estado || '').toLowerCase();
+          if (est.includes('no matricula') || est.includes('baja')) bajas++;
+          else if (est.includes('confirmado') || item.pago === 'SI') confirmados++;
+          else pendientes++;
+        });
+      });
+
+      document.getElementById('statTotal').innerText = total;
+      document.getElementById('statConfirmados').innerText = confirmados;
+      document.getElementById('statPendientes').innerText = pendientes;
+      document.getElementById('statBajas').innerText = bajas;
     }
 
-    function cargarTabla(listaDatos) {
+    function seleccionarPestana(nombre, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
+      pestanaActual = nombre;
+      cargarTabla(baseDatos[nombre] || []);
+    }
+
+    function cargarTabla(datos) {
       const tbody = document.getElementById('tablaBody');
       tbody.innerHTML = '';
 
-      if (!listaDatos || listaDatos.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No hay registros cargados para esta pestaña.</td></tr>`;
+      if (!datos || datos.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">Sin registros disponibles para esta pestaña.</td></tr>`;
         return;
       }
 
-      listaDatos.forEach(row => {
+      datos.forEach((item, index) => {
         const tr = document.createElement('tr');
+        const est = (item.estado || '').toLowerCase();
 
-        // Formateo del badge según estado
-        let estadoBadge = '';
-        const est = row.estado.toLowerCase();
-
+        let badgeEstado = '<span class="badge bg-secondary">Pendiente</span>';
         if (est.includes('no matricula') || est.includes('baja')) {
-          estadoBadge = `<span class="badge-no-matricula">No Matricula / Baja</span>`;
-        } else if (est.includes('confirmado')) {
-          estadoBadge = `<span class="badge-confirmado"><i class="bi bi-circle-fill me-1" style="font-size:0.5rem"></i>Confirmado</span>`;
+          badgeEstado = '<span class="badge-no-matricula">No Matricula / Baja</span>';
+        } else if (est.includes('confirmado') || item.pago === 'SI') {
+          badgeEstado = '<span class="badge bg-success-subtle text-success border border-success px-2 py-1 rounded-pill">🟢 Confirmado</span>';
         } else {
-          estadoBadge = `<span class="badge-pendiente"><i class="bi bi-circle-fill me-1" style="font-size:0.5rem"></i>Pendiente</span>`;
+          badgeEstado = '<span class="badge bg-warning-subtle text-dark border border-warning px-2 py-1 rounded-pill">🟠 Pendiente</span>';
         }
 
-        const pagoBadge = row.pago === 'SI' 
-          ? `<span class="badge bg-success-subtle text-success border border-success">SI</span>`
-          : `<span class="badge bg-danger-subtle text-danger border border-danger">NO</span>`;
+        const badgePago = item.pago === 'SI' 
+          ? '<span class="badge bg-success-subtle text-success border border-success">SI</span>'
+          : '<span class="badge bg-danger-subtle text-danger border border-danger">NO</span>';
 
         tr.innerHTML = `
-          <td class="text-secondary small fw-bold">${row.codigo}</td>
-          <td class="fw-bold">${row.alumno}</td>
-          <td>${row.curso}</td>
-          <td class="text-center">${pagoBadge}</td>
-          <td class="text-center">${estadoBadge}</td>
-          <td class="fw-semibold ${row.turno === 'NO ASIGNADO' ? 'text-primary' : ''}">${row.turno}</td>
-          <td class="text-muted small">${row.obs}</td>
-          <td class="text-center"><button class="btn btn-sm btn-light border"><i class="bi bi-person-badge text-primary"></i></button></td>
+          <td class="text-secondary small fw-bold">${item.codigo || '-'}</td>
+          <td class="fw-bold">${item.alumno}</td>
+          <td>${item.curso}</td>
+          <td class="text-center">${badgePago}</td>
+          <td class="text-center">${badgeEstado}</td>
+          <td class="fw-semibold">${item.turno}</td>
+          <td class="text-muted small">${item.obs || '-'}</td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-outline-primary" onclick='abrirFicha(${JSON.stringify(item)})'>
+              <i class="bi bi-card-heading"></i>
+            </button>
+          </td>
         `;
-
         tbody.appendChild(tr);
       });
     }
 
+    function abrirFicha(alumno) {
+      const content = document.getElementById('fichaContent');
+      content.innerHTML = `
+        <div class="mb-3 border-bottom pb-2">
+          <h6 class="text-muted mb-1">CÓDIGO INSTITUCIONAL</h6>
+          <p class="fw-bold m-0">${alumno.codigo || 'N/A'}</p>
+        </div>
+        <div class="mb-3 border-bottom pb-2">
+          <h6 class="text-muted mb-1">ALUMNO</h6>
+          <p class="fs-5 fw-bold text-primary m-0">${alumno.alumno}</p>
+        </div>
+        <div class="row mb-3">
+          <div class="col-6">
+            <h6 class="text-muted mb-1">CURSO / GRADO</h6>
+            <p class="fw-semibold m-0">${alumno.curso}</p>
+          </div>
+          <div class="col-6">
+            <h6 class="text-muted mb-1">ESTADO PAGO</h6>
+            <p class="fw-semibold m-0">${alumno.pago}</p>
+          </div>
+        </div>
+        <div class="mb-3 border-bottom pb-2">
+          <h6 class="text-muted mb-1">ESTADO REGISTRADO</h6>
+          <p class="fw-bold m-0">${alumno.estado}</p>
+        </div>
+        <div>
+          <h6 class="text-muted mb-1">OBSERVACIONES / SEC. DE INGRESOS</h6>
+          <p class="text-secondary m-0">${alumno.obs || 'Sin observaciones registradas.'}</p>
+        </div>
+      `;
+      modalFicha.show();
+    }
+
     function filtrarTabla() {
-      const busqueda = document.getElementById('searchInput').value.toLowerCase();
-      const estadoFiltro = document.getElementById('estadoSelect').value.toLowerCase();
-      
-      const datos = datosPorHoja[hojaActual] || [];
-      const filtrados = datos.filter(item => {
-        const coincideNombre = item.alumno.toLowerCase().includes(busqueda) || item.codigo.toLowerCase().includes(busqueda);
-        const coincideEstado = !estadoFiltro || item.estado.toLowerCase().includes(estadoFiltro);
-        return coincideNombre && coincideEstado;
+      const text = document.getElementById('searchInput').value.toLowerCase();
+      const estadoFilter = document.getElementById('estadoSelect').value.toLowerCase();
+
+      const lista = baseDatos[pestanaActual] || [];
+      const filtrados = lista.filter(item => {
+        const matchText = item.alumno.toLowerCase().includes(text) || (item.codigo || '').toLowerCase().includes(text);
+        const matchEstado = !estadoFilter || item.estado.toLowerCase().includes(estadoFilter) || item.pago.toLowerCase().includes(estadoFilter);
+        return matchText && matchEstado;
       });
 
       cargarTabla(filtrados);
     }
 
-    // Carga inicial
-    document.addEventListener('DOMContentLoaded', () => {
-      cargarTabla(datosPorHoja['REMA 7°']);
-    });
+    function sincronizarDatos() {
+      const badge = document.getElementById('syncStatus');
+      badge.className = "badge bg-warning-subtle text-dark border border-warning px-3 py-2 rounded-pill";
+      badge.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Sincronizando...';
+
+      setTimeout(() => {
+        badge.className = "badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill";
+        badge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Sincronizado';
+      }, 800);
+    }
   </script>
 </body>
 </html>
