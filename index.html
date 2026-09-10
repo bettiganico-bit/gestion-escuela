@@ -3,494 +3,328 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Colegio Esteban Echeverría - Gestión REMA & Matriculación</title>
+  <title>Colegio Esteban Echeverría - Gestión de Matriculación</title>
   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-  
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Open Sans"', 'sans-serif'],
-            display: ['Montserrat', 'sans-serif'],
-          },
-          colors: {
-            vaneduc: {
-              navy: '#002147',
-              blue: '#0056b3',
-              lightBlue: '#eef5fc',
-              gold: '#d4af37',
-              bg: '#f4f6f8'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Bootstrap 5 CSS para estructura base -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Iconos de Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
   <style>
-    .badge-verde { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
-    .badge-naranja { background-color: #ffedd5; color: #9a3412; border: 1px solid #fde68a; }
-    .badge-rojo { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    /* =========================================================
+       PALETA INSTITUCIONAL - COLEGIO ESTEBAN ECHEVERRÍA
+       ========================================================= */
+    :root {
+      --primary-teal: #3EB5AD;          /* Turquesa exacto del escudo */
+      --primary-dark: #11232C;          /* Azul oscuro/noche institucional */
+      --accent-yellow: #FFE049;         /* Amarillo sol del escudo */
+      --bg-body: #F4F7F6;               /* Fondo gris/verde clarito */
+      --text-color: #11232C;
+      --badge-danger-bg: #FFE6E6;
+      --badge-danger-text: #D32F2F;
+      --badge-danger-border: #FFCDD2;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-color);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Header e Identidad */
+    .header-bar {
+      background-color: #FFFFFF;
+      border-bottom: 2px solid #E0E0E0;
+      padding: 12px 24px;
+    }
+
+    .brand-shield {
+      height: 52px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* Pestañas de Navegación */
+    .nav-tabs-custom {
+      display: flex;
+      gap: 8px;
+      border-bottom: 2px solid #E0E0E0;
+      background: #FFFFFF;
+      padding: 0 16px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 12px 20px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #555555;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .tab-btn:hover {
+      color: var(--primary-teal);
+    }
+
+    .tab-btn.active {
+      color: var(--primary-teal);
+      border-bottom-color: var(--primary-teal);
+    }
+
+    /* Tarjeta de Contenido y Tabla */
+    .main-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      border: 1px solid #EAEAEA;
+      overflow: hidden;
+    }
+
+    .table-custom thead {
+      background-color: var(--primary-dark) !important;
+      color: #FFFFFF !important;
+    }
+
+    .table-custom thead th {
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+      padding: 14px 12px;
+      border: none;
+      vertical-align: middle;
+    }
+
+    .table-custom tbody td {
+      vertical-align: middle;
+      padding: 12px;
+      font-size: 0.9rem;
+    }
+
+    /* =========================================================
+       CORRECCIÓN: ETIQUETA NO MATRICULA / BAJA COMPLETA
+       ========================================================= */
+    .badge-no-matricula {
+      display: inline-block !important;
+      white-space: normal !important;        /* Permite que el texto baje y no se corte */
+      word-wrap: break-word !important;
+      max-width: 150px;                      /* Ancho para forzar lectura clara en 2 líneas */
+      padding: 6px 10px !important;
+      border-radius: 10px !important;
+      font-size: 0.78rem !important;
+      font-weight: 700 !important;
+      line-height: 1.25 !important;
+      text-align: center !important;
+      background-color: var(--badge-danger-bg) !important;
+      color: var(--badge-danger-text) !important;
+      border: 1px solid var(--badge-danger-border) !important;
+    }
+
+    .badge-confirmado {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+      border: 1px solid #C8E6C9;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .badge-pendiente {
+      background-color: #FFF8E1;
+      color: #B78103;
+      border: 1px solid #FFE082;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    .filter-box {
+      background-color: #FFFFFF;
+      border-radius: 10px;
+      border: 1px solid #E5E5E5;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
-<body class="bg-vaneduc-bg font-sans min-h-screen flex flex-col text-slate-800">
+<body>
 
-  <!-- Header -->
-  <header class="bg-vaneduc-navy text-white shadow-xl border-b-4 border-vaneduc-gold">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-wrap justify-between items-center gap-4">
-      <div class="flex items-center space-x-4">
-        <div class="bg-white p-2 rounded-xl shadow-md flex items-center justify-center">
-          <img src="https://echeverria.vaneduc.edu.ar/img/logo-colegio.png" alt="Escudo Colegio Esteban Echeverría" class="h-12 object-contain" onerror="this.onerror=null; this.src='https://vaneduc.edu.ar/img/logo.png'">
-        </div>
-        <div>
-          <h1 class="font-display text-xl font-extrabold tracking-tight text-white">COLEGIO ESTEBAN ECHEVERRÍA</h1>
-          <p class="text-xs font-semibold text-blue-200 tracking-wider uppercase">Sistema Directivo de REMA & Matriculación</p>
-        </div>
+  <!-- ENCABEZADO CON ESCUDO EN PALETA OFICIAL -->
+  <header class="header-bar d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-3">
+      <!-- El archivo del escudo debe llamarse ESCUDO.png en la raíz -->
+      <img src="ESCUDO.png" alt="Escudo Colegio Esteban Echeverría" class="brand-shield" onerror="this.style.display='none'">
+      <div>
+        <h1 class="h5 m-0 font-weight-bold" style="color: var(--primary-dark);">Colegio Esteban Echeverría</h1>
+        <small class="text-muted">Sistema de Control Institucional y Matriculación</small>
       </div>
-      
-      <button onclick="cargarDatos()" class="bg-vaneduc-blue hover:bg-blue-600 text-white px-5 py-2.5 rounded-xl text-sm font-display font-bold transition flex items-center space-x-2 shadow-lg border border-blue-400/30">
-        <i class="fa-solid fa-rotate"></i>
-        <span>Sincronizar Planilla</span>
-      </button>
     </div>
+    <span class="badge bg-success-subtle text-success border border-success px-3 py-2 rounded-pill">
+      <i class="bi bi-check-circle-fill me-1"></i> Sincronizado
+    </span>
   </header>
 
-  <!-- Pestañas -->
-  <div class="bg-white border-b border-slate-200 shadow-sm sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-6 flex space-x-2 md:space-x-8 text-sm font-display font-bold overflow-x-auto">
-      <button onclick="cambiarSeccion('rema7')" id="tabRema7" class="py-3.5 border-b-2 border-vaneduc-navy text-vaneduc-navy flex items-center space-x-2 whitespace-nowrap">
-        <i class="fa-solid fa-graduation-cap text-purple-600"></i>
-        <span>REMA 7° Grado</span>
-      </button>
-      <button onclick="cambiarSeccion('rema14')" id="tabRema14" class="py-3.5 border-b-2 border-transparent text-slate-500 hover:text-vaneduc-navy flex items-center space-x-2 whitespace-nowrap">
-        <i class="fa-solid fa-users text-blue-600"></i>
-        <span>REMA 1° a 4° Año</span>
-      </button>
-      <button onclick="cambiarSeccion('nuevos')" id="tabNuevos" class="py-3.5 border-b-2 border-transparent text-slate-500 hover:text-vaneduc-navy flex items-center space-x-2 whitespace-nowrap">
-        <i class="fa-solid fa-user-plus text-emerald-600"></i>
-        <span>Nuevos 2026/2027</span>
-      </button>
-      <button onclick="cambiarSeccion('preplanta')" id="tabPreplanta" class="py-3.5 border-b-2 border-transparent text-slate-500 hover:text-vaneduc-navy flex items-center space-x-2 whitespace-nowrap">
-        <i class="fa-solid fa-chart-pie text-amber-600"></i>
-        <span>Pre-Planta Orgánica</span>
-      </button>
-    </div>
-  </div>
+  <!-- PESTAÑAS (ENLAZADAS CORRECTAMENTE CON LA HOJA "REMA DE 1 A 4") -->
+  <nav class="nav-tabs-custom mt-2">
+    <button class="tab-btn active" onclick="seleccionarPestana('REMA 7°', this)">
+      🎓 REMA 7° Grado
+    </button>
+    <button class="tab-btn" onclick="seleccionarPestana('REMA DE 1 A 4', this)">
+      👥 REMA 1° a 4° Año
+    </button>
+    <button class="tab-btn" onclick="seleccionarPestana('NUEVOS 20262027', this)">
+      ➕ Nuevos 2026/2027
+    </button>
+    <button class="tab-btn" onclick="seleccionarPestana('SINTESIS PRE PLANTA NOVIEMBRE', this)">
+      📊 Pre-Planta Orgánica
+    </button>
+  </nav>
 
-  <main class="max-w-7xl mx-auto px-6 py-6 flex-1 w-full space-y-6">
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container-fluid p-4">
 
-    <!-- Tarjetas de métricas -->
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
-        <p class="text-xs font-display font-bold text-slate-400 uppercase">Vista Actual</p>
-        <p id="cTotal" class="text-2xl font-display font-black text-slate-800 mt-1">--</p>
+    <!-- FILTROS -->
+    <div class="filter-box shadow-sm">
+      <div class="d-flex align-items-center mb-3">
+        <i class="bi bi-funnel-fill text-secondary me-2"></i>
+        <strong style="color: var(--primary-dark); font-size: 0.85rem; text-transform: uppercase;">Filtros de Control Institucional</strong>
       </div>
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-emerald-500">
-        <p class="text-xs font-display font-bold text-emerald-600 uppercase">Confirmados / Pago</p>
-        <p id="cVerde" class="text-2xl font-display font-black text-emerald-600 mt-1">--</p>
-      </div>
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-amber-500">
-        <p class="text-xs font-display font-bold text-amber-600 uppercase">Pendientes</p>
-        <p id="cNaranja" class="text-2xl font-display font-black text-amber-600 mt-1">--</p>
-      </div>
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-l-rose-500">
-        <p class="text-xs font-display font-bold text-rose-600 uppercase">Bajas</p>
-        <p id="cRojo" class="text-2xl font-display font-black text-rose-600 mt-1">--</p>
-      </div>
-      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 col-span-2 md:col-span-1 border-l-4 border-l-vaneduc-navy">
-        <p class="text-xs font-display font-bold text-vaneduc-navy uppercase">Total General</p>
-        <p id="cGeneral" class="text-2xl font-display font-black text-vaneduc-navy mt-1">--</p>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <input type="text" id="searchInput" class="form-control" placeholder="Buscar Alumno o Código..." onkeyup="filtrarTabla()">
+        </div>
+        <div class="col-md-4">
+          <select id="cursoSelect" class="form-select" onchange="filtrarTabla()">
+            <option value="">Todos los Cursos</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <select id="estadoSelect" class="form-select" onchange="filtrarTabla()">
+            <option value="">Todos los Estados</option>
+            <option value="Confirmado">Confirmado</option>
+            <option value="Pendiente">Pendiente</option>
+            <option value="No Matricula">No Matricula / Baja</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <!-- Filtros -->
-    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 space-y-3">
-      <div class="flex justify-between items-center border-b pb-2 border-slate-100">
-        <span class="text-xs font-display font-bold text-vaneduc-navy uppercase tracking-wider flex items-center space-x-2">
-          <i class="fa-solid fa-filter"></i>
-          <span>Filtros de Control Institucional</span>
-        </span>
-        <span id="txtEstado" class="text-xs font-semibold text-vaneduc-blue">Sincronizando...</span>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
-        <input type="text" id="inputBuscar" oninput="filtrar()" placeholder="Buscar Alumno o Código..." class="p-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-vaneduc-blue">
-        <select id="selCurso" onchange="filtrar()" class="p-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-vaneduc-blue">
-          <option value="">Todos los Cursos</option>
-        </select>
-        <select id="selEstado" onchange="filtrar()" class="p-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-vaneduc-blue">
-          <option value="">Todos los Estados</option>
-          <option value="VERDE">Confirmado / Pago SI</option>
-          <option value="NARANJA">Pendiente</option>
-          <option value="ROJO">Baja / NO</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Tabla -->
-    <div id="secTabla" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead class="bg-vaneduc-navy text-white font-display text-xs uppercase tracking-wider">
+    <!-- TABLA DE ALUMNOS -->
+    <div class="main-card">
+      <div class="table-responsive">
+        <table class="table table-hover table-custom m-0" id="tablaMatricula">
+          <thead>
             <tr>
-              <th class="p-3.5">Código</th>
-              <th class="p-3.5">Alumno</th>
-              <th class="p-3.5">Grado / Curso</th>
-              <th class="p-3.5 text-center">Pago</th>
-              <th class="p-3.5 text-center">Estado / Respuesta</th>
-              <th class="p-3.5">Turno / Detalle</th>
-              <th class="p-3.5">Observaciones</th>
-              <th class="p-3.5 text-center">Ficha</th>
+              <th>CÓDIGO</th>
+              <th>ALUMNO</th>
+              <th>GRADO / CURSO</th>
+              <th class="text-center">PAGO</th>
+              <th class="text-center">ESTADO / RESPUESTA</th>
+              <th>TURNO / DETALLE</th>
+              <th>OBSERVACIONES</th>
+              <th class="text-center">FICHA</th>
             </tr>
           </thead>
-          <tbody id="tbAlumnos" class="divide-y divide-slate-100">
-            <!-- Filas dinámicas -->
+          <tbody id="tablaBody">
+            <!-- Datos de ejemplo rendereados por JS -->
           </tbody>
         </table>
       </div>
     </div>
-
-    <!-- Pre-Planta Orgánica -->
-    <div id="secPreplanta" class="space-y-6 hidden">
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <div class="flex flex-wrap justify-between items-center mb-6">
-          <div>
-            <h2 class="text-lg font-display font-bold text-vaneduc-navy">Síntesis Pre-Planta Orgánica 2027</h2>
-            <p class="text-xs text-slate-500">Distribución de matrículas confirmadas y proyecciones por curso.</p>
-          </div>
-          <span class="bg-vaneduc-lightBlue text-vaneduc-navy px-3 py-1 rounded-full text-xs font-display font-bold border border-blue-200">
-            Cierre Institucional
-          </span>
-        </div>
-
-        <div id="gridPreplanta" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        </div>
-      </div>
-    </div>
-
   </main>
 
-  <!-- Modal Ficha de Alumno -->
-  <div id="modalFicha" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
-      <div class="bg-vaneduc-navy text-white p-5 flex justify-between items-center border-b-2 border-vaneduc-gold">
-        <div>
-          <span id="mCodigo" class="text-xs bg-blue-900 px-2 py-0.5 rounded font-mono text-blue-200">--</span>
-          <h3 id="mNombre" class="text-base font-display font-bold mt-1">--</h3>
-        </div>
-        <button onclick="cerrarFicha()" class="text-slate-300 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <div class="p-5 space-y-3 text-sm">
-        <div class="grid grid-cols-2 gap-3">
-          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span class="text-xs text-slate-400 font-display font-bold block">CURSO / GRADO</span>
-            <span id="mCurso" class="font-bold text-slate-700">--</span>
-          </div>
-          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-            <span class="text-xs text-slate-400 font-display font-bold block">TURNO / DETALLE</span>
-            <span id="mTurno" class="font-bold text-vaneduc-blue">--</span>
-          </div>
-        </div>
-        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-          <span class="text-xs text-slate-400 font-display font-bold block mb-1">ESTADO / RESPUESTA</span>
-          <span id="mEstado" class="font-bold block">--</span>
-        </div>
-        <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-          <span class="text-xs text-slate-400 font-display font-bold block mb-1">OBSERVACIONES</span>
-          <p id="mObs" class="text-xs text-slate-600 italic">--</p>
-        </div>
-      </div>
-      <div class="bg-slate-50 p-3.5 border-t border-slate-100 text-right">
-        <button onclick="cerrarFicha()" class="bg-vaneduc-navy text-white px-4 py-2 rounded-xl text-xs font-display font-bold hover:bg-vaneduc-blue transition">Cerrar Ficha</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaDJPV3UglmOBx-6bpzJmgGhIKfVs1a-8zZmGtYb6Jxyq7b_c5xYPvqyX0Spydvnsm/exec";
-    
-    let todosLosAlumnos = [];
-    let datosRema7 = [];
-    let datosRema14 = [];
-    let datosNuevos = [];
-    let seccionActiva = 'rema7';
+    // Datos de muestra estructurados conforme al Excel institucional
+    const datosPorHoja = {
+      'REMA 7°': [
+        { codigo: 'CO VPR M 7 A', alumno: 'Amante, Shanti Maylen', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Mañana' },
+        { codigo: 'CO VPR M 7 A', alumno: 'Anacondio, Matteo Dario', curso: '7° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Mañana' },
+        { codigo: 'CO VPR M 7 A', alumno: 'Bevilacqua, Nina', curso: '7° A', pago: 'NO', estado: 'Pendiente', turno: 'Mañana', obs: 'No continúa ya que prioriza otra propuesta' },
+        { codigo: 'CO VPR M 7 A', alumno: 'Cannetti, Francesco', curso: '7° A', pago: 'NO', estado: 'No Matricula / Baja', turno: 'NO ASIGNADO', obs: 'No matricularé' }
+      ],
+      'REMA DE 1 A 4': [
+        { codigo: 'SEC 1A 01', alumno: 'Gomez, Lucas', curso: '1° A', pago: 'SI', estado: 'Confirmado', turno: 'Mañana', obs: 'Matriculado' },
+        { codigo: 'SEC 2B 04', alumno: 'Lopez, Mariana', curso: '2° B', pago: 'NO', estado: 'No Matricula / Baja', turno: 'NO ASIGNADO', obs: 'Cambio de domicilio' }
+      ],
+      'NUEVOS 20262027': [],
+      'SINTESIS PRE PLANTA NOVIEMBRE': []
+    };
 
-    // Normalizador de filas según solapa
-    function parsearFila(row) {
-      if (!row || row.length === 0) return null;
+    let hojaActual = 'REMA 7°';
 
-      // Buscar si es encabezado o fila vacía
-      const strRow = row.join(" ").toUpperCase();
-      if (strRow.includes("CÓDIGO") || strRow.includes("NOMBRE Y APELLIDO") || strRow.includes("CITADE")) return null;
+    function seleccionarPestana(nombreHoja, elementoBtn) {
+      // Actualizar estilo visual de las pestañas
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (elementoBtn) elementoBtn.classList.add('active');
 
-      // Limpiar celdas nulas
-      const clean = row.map(c => (c !== null && c !== undefined) ? c.toString().trim() : "");
-      
-      // Filtrar filas completamente vacías
-      if (clean.every(c => c === "")) return null;
+      hojaActual = nombreHoja;
+      cargarTabla(datosPorHoja[nombreHoja] || []);
+    }
 
-      // Encontrar código que empieza con CO
-      let codigo = clean.find(c => c.startsWith("CO")) || clean[1] || clean[0] || "";
-      let nombre = clean.find(c => c.includes(",") || (c.length > 5 && !c.startsWith("CO") && isNaN(c))) || clean[2] || "";
+    function cargarTabla(listaDatos) {
+      const tbody = document.getElementById('tablaBody');
+      tbody.innerHTML = '';
 
-      // Asignar según patrones
-      let curso = "", pago = "", estado = "", turno = "", obs = "";
-
-      // Si es REMA 7° (tiene 7º o Mañana/Tarde)
-      if (strRow.includes("7º") || strRow.includes("MAÑANA") || strRow.includes("TARDE")) {
-        curso = clean.find(c => c.includes("7º")) || "7º A";
-        pago = clean.find(c => c === "SI" || c === "NO") || "";
-        estado = clean.find(c => c === "CONFIRMADO" || c === "NO MATRICULA" || c === "PENDIENTE") || "";
-        turno = clean.find(c => c === "Mañana" || c === "Tarde" || c === "NO ASIGNADO") || "";
-        obs = clean[7] || clean[6] || "";
-      } 
-      // Si es REMA 1° a 4°
-      else if (strRow.includes("1 A") || strRow.includes("1 B") || strRow.includes("2 A") || strRow.includes("2 B") || strRow.includes("3 A") || strRow.includes("3 B") || strRow.includes("4 A") || strRow.includes("4 B") || strRow.includes("LAB")) {
-        curso = clean.find(c => /^[1-4]º?\s?[A-B]/.test(c) || c.includes("Lab")) || clean[2] || "";
-        let sis = clean.filter(c => c === "SI" || c === "NO");
-        pago = sis[1] || sis[0] || "";
-        estado = clean.find(c => c === "PENDIENTE" || c === "MOROSIDAD" || c === "SI" || c === "NO") || "";
-        obs = clean[7] || clean[8] || clean[6] || "";
-      }
-      // Nuevos
-      else {
-        curso = clean.find(c => c.includes("º")) || clean[6] || "";
-        estado = clean.find(c => c === "EXTERNO" || c === "INGRESANTE") || "NUEVO";
-        obs = clean[3] || "";
+      if (!listaDatos || listaDatos.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted">No hay registros cargados para esta pestaña.</td></tr>`;
+        return;
       }
 
-      return {
-        codigo: codigo,
-        nombre: nombre,
-        curso: curso,
-        pago: pago,
-        estado: estado,
-        turno: turno,
-        obs: obs,
-        raw: clean
-      };
-    }
+      listaDatos.forEach(row => {
+        const tr = document.createElement('tr');
 
-    async function cargarDatos() {
-      const txt = document.getElementById("txtEstado");
-      txt.innerText = "Sincronizando...";
-      try {
-        const res = await fetch(SCRIPT_URL, { redirect: "follow" });
-        const raw = await res.json();
+        // Formateo del badge según estado
+        let estadoBadge = '';
+        const est = row.estado.toLowerCase();
 
-        if (raw && Array.isArray(raw)) {
-          const parseados = raw.map(parsearFila).filter(f => f !== null && f.nombre !== "");
-
-          datosRema7 = parseados.filter(f => f.curso.includes("7º") || f.raw.join(" ").includes("7º"));
-          datosNuevos = parseados.filter(f => f.estado === "EXTERNO" || f.raw.join(" ").includes("EXTERNO"));
-          datosRema14 = parseados.filter(f => !datosRema7.includes(f) && !datosNuevos.includes(f));
-
-          poblarCursos();
-          filtrar();
-          renderPreplanta();
-          txt.innerText = "Sincronizado ✅";
-        }
-      } catch (err) {
-        console.error(err);
-        txt.innerText = "Error de conexión";
-      }
-    }
-
-    function getDatosActuales() {
-      if (seccionActiva === 'rema7') return datosRema7;
-      if (seccionActiva === 'rema14') return datosRema14;
-      if (seccionActiva === 'nuevos') return datosNuevos;
-      return [];
-    }
-
-    function poblarCursos() {
-      const sel = document.getElementById("selCurso");
-      const dataset = getDatosActuales();
-      const cursos = new Set();
-
-      dataset.forEach(f => {
-        if(f.curso) cursos.add(f.curso);
-      });
-
-      sel.innerHTML = '<option value="">Todos los Cursos</option>';
-      Array.from(cursos).sort().forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
-    }
-
-    function filtrar() {
-      const q = document.getElementById("inputBuscar").value.toLowerCase();
-      const curso = document.getElementById("selCurso").value;
-      const est = document.getElementById("selEstado").value;
-      const dataset = getDatosActuales();
-
-      const res = dataset.filter(f => {
-        const cod = f.codigo.toLowerCase();
-        const nom = f.nombre.toLowerCase();
-        const cur = f.curso;
-        const eRaw = (f.pago + " " + f.estado).toUpperCase();
-
-        const matchQ = nom.includes(q) || cod.includes(q);
-        const matchC = !curso || cur === curso;
-
-        let matchE = true;
-        if (est === "VERDE") matchE = eRaw.includes("SI") || eRaw.includes("CONFIRMADO");
-        if (est === "NARANJA") matchE = eRaw.includes("PENDIENTE") || eRaw.includes("MOROSIDAD");
-        if (est === "ROJO") matchE = eRaw.includes("NO MATRICULA") || eRaw.includes("BAJA") || (eRaw.includes("NO") && !eRaw.includes("CONFIRMADO"));
-
-        return matchQ && matchC && matchE;
-      });
-
-      renderTabla(res);
-      renderMetricas(res);
-    }
-
-    function renderTabla(filas) {
-      const tb = document.getElementById("tbAlumnos");
-      tb.innerHTML = "";
-
-      filas.forEach((f, idx) => {
-        const tr = document.createElement("tr");
-        tr.className = "hover:bg-slate-50 border-b border-slate-100 transition";
-
-        const eRaw = (f.pago + " " + f.estado).toUpperCase();
-        let eBadge = '<span class="badge-naranja px-2.5 py-1 rounded-full text-xs font-bold">🟠 Pendiente</span>';
-        if (eRaw.includes("CONFIRMADO") || (f.pago === "SI" && !eRaw.includes("NO MATRICULA"))) {
-          eBadge = '<span class="badge-verde px-2.5 py-1 rounded-full text-xs font-bold">🟢 Confirmado</span>';
-        } else if (eRaw.includes("NO MATRICULA") || eRaw.includes("BAJA")) {
-          eBadge = '<span class="badge-rojo px-2.5 py-1 rounded-full text-xs font-bold">🔴 No Matricula / Baja</span>';
+        if (est.includes('no matricula') || est.includes('baja')) {
+          estadoBadge = `<span class="badge-no-matricula">No Matricula / Baja</span>`;
+        } else if (est.includes('confirmado')) {
+          estadoBadge = `<span class="badge-confirmado"><i class="bi bi-circle-fill me-1" style="font-size:0.5rem"></i>Confirmado</span>`;
+        } else {
+          estadoBadge = `<span class="badge-pendiente"><i class="bi bi-circle-fill me-1" style="font-size:0.5rem"></i>Pendiente</span>`;
         }
 
-        const pagoBadge = f.pago === "SI" 
-          ? '<span class="text-emerald-700 font-extrabold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">SI</span>' 
-          : f.pago === "NO" 
-            ? '<span class="text-rose-700 font-extrabold bg-rose-50 px-2 py-0.5 rounded border border-rose-200">NO</span>' 
-            : '<span class="text-slate-400">-</span>';
+        const pagoBadge = row.pago === 'SI' 
+          ? `<span class="badge bg-success-subtle text-success border border-success">SI</span>`
+          : `<span class="badge bg-danger-subtle text-danger border border-danger">NO</span>`;
 
         tr.innerHTML = `
-          <td class="p-3.5 font-mono text-xs text-slate-500 font-semibold">${f.codigo || '--'}</td>
-          <td class="p-3.5 font-bold text-slate-800">${f.nombre || '--'}</td>
-          <td class="p-3.5 text-slate-600 font-semibold">${f.curso || '--'}</td>
-          <td class="p-3.5 text-center">${pagoBadge}</td>
-          <td class="p-3.5 text-center">${eBadge}</td>
-          <td class="p-3.5 text-vaneduc-blue font-semibold">${f.turno || f.estado || '--'}</td>
-          <td class="p-3.5 text-xs text-slate-500 truncate max-w-xs">${f.obs || '-'}</td>
-          <td class="p-3.5 text-center">
-            <button onclick="abrirFicha(${idx})" class="text-vaneduc-blue hover:text-blue-700 text-lg">
-              <i class="fa-solid fa-address-card"></i>
-            </button>
-          </td>
+          <td class="text-secondary small fw-bold">${row.codigo}</td>
+          <td class="fw-bold">${row.alumno}</td>
+          <td>${row.curso}</td>
+          <td class="text-center">${pagoBadge}</td>
+          <td class="text-center">${estadoBadge}</td>
+          <td class="fw-semibold ${row.turno === 'NO ASIGNADO' ? 'text-primary' : ''}">${row.turno}</td>
+          <td class="text-muted small">${row.obs}</td>
+          <td class="text-center"><button class="btn btn-sm btn-light border"><i class="bi bi-person-badge text-primary"></i></button></td>
         `;
-        tb.appendChild(tr);
+
+        tbody.appendChild(tr);
       });
     }
 
-    function renderMetricas(filasActuales) {
-      document.getElementById("cTotal").innerText = filasActuales.length;
-      document.getElementById("cGeneral").innerText = datosRema7.length + datosRema14.length + datosNuevos.length;
-
-      let v = 0, n = 0, r = 0;
-      filasActuales.forEach(f => {
-        const est = (f.pago + " " + f.estado).toUpperCase();
-        if (est.includes("CONFIRMADO") || (f.pago === "SI" && !est.includes("NO MATRICULA"))) v++;
-        else if (est.includes("NO MATRICULA") || est.includes("BAJA")) r++;
-        else n++;
-      });
-
-      document.getElementById("cVerde").innerText = v;
-      document.getElementById("cNaranja").innerText = n;
-      document.getElementById("cRojo").innerText = r;
-    }
-
-    function renderPreplanta() {
-      const g = document.getElementById("gridPreplanta");
-      g.innerHTML = "";
-      const todos = [...datosRema7, ...datosRema14, ...datosNuevos];
-      const cursos = {};
-
-      todos.forEach(f => {
-        const c = f.curso || "Sin Especificar";
-        if (!cursos[c]) cursos[c] = { total: 0, ok: 0 };
-        cursos[c].total++;
-        const est = (f.pago + " " + f.estado).toUpperCase();
-        if (est.includes("CONFIRMADO") || (f.pago === "SI" && !est.includes("NO MATRICULA"))) cursos[c].ok++;
-      });
-
-      Object.keys(cursos).sort().forEach(c => {
-        const d = cursos[c];
-        const pct = d.total > 0 ? Math.round((d.ok / d.total) * 100) : 0;
-        g.innerHTML += `
-          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-            <div class="flex justify-between items-center">
-              <span class="font-display font-bold text-slate-800">${c}</span>
-              <span class="text-xs bg-blue-100 text-vaneduc-navy px-2 py-0.5 rounded font-bold">${d.total} Alumnos</span>
-            </div>
-            <div class="w-full bg-slate-200 rounded-full h-2">
-              <div class="bg-emerald-500 h-2 rounded-full" style="width: ${pct}%"></div>
-            </div>
-            <div class="flex justify-between text-xs text-slate-500">
-              <span>Confirmados: <b>${d.ok}</b></span>
-              <span>Cobertura: <b>${pct}%</b></span>
-            </div>
-          </div>
-        `;
-      });
-    }
-
-    function abrirFicha(idx) {
-      const f = getDatosActuales()[idx];
-      document.getElementById("mCodigo").innerText = f.codigo || 'S/D';
-      document.getElementById("mNombre").innerText = f.nombre || 'S/D';
-      document.getElementById("mCurso").innerText = f.curso || 'S/D';
-      document.getElementById("mTurno").innerText = f.turno || f.estado || 'S/D';
+    function filtrarTabla() {
+      const busqueda = document.getElementById('searchInput').value.toLowerCase();
+      const estadoFiltro = document.getElementById('estadoSelect').value.toLowerCase();
       
-      const eRaw = (f.pago + " " + f.estado).toUpperCase();
-      let eTxt = "🟠 Pendiente de regularizar";
-      if (eRaw.includes("CONFIRMADO") || (f.pago === "SI" && !eRaw.includes("NO MATRICULA"))) eTxt = "🟢 Confirmado / Pago registrado";
-      else if (eRaw.includes("NO MATRICULA") || eRaw.includes("BAJA")) eTxt = "🔴 Baja / No inscripto";
+      const datos = datosPorHoja[hojaActual] || [];
+      const filtrados = datos.filter(item => {
+        const coincideNombre = item.alumno.toLowerCase().includes(busqueda) || item.codigo.toLowerCase().includes(busqueda);
+        const coincideEstado = !estadoFiltro || item.estado.toLowerCase().includes(estadoFiltro);
+        return coincideNombre && coincideEstado;
+      });
 
-      document.getElementById("mEstado").innerText = eTxt;
-      document.getElementById("mObs").innerText = f.obs || 'Sin observaciones.';
-      document.getElementById("modalFicha").classList.remove("hidden");
+      cargarTabla(filtrados);
     }
 
-    function cerrarFicha() {
-      document.getElementById("modalFicha").classList.add("hidden");
-    }
-
-    function cambiarSeccion(s) {
-      seccionActiva = s;
-      const secT = document.getElementById("secTabla");
-      const secP = document.getElementById("secPreplanta");
-
-      const tab7 = document.getElementById("tabRema7");
-      const tab14 = document.getElementById("tabRema14");
-      const tabN = document.getElementById("tabNuevos");
-      const tabP = document.getElementById("tabPreplanta");
-
-      const activeClass = "py-3.5 border-b-2 border-vaneduc-navy text-vaneduc-navy flex items-center space-x-2 whitespace-nowrap";
-      const inactiveClass = "py-3.5 border-b-2 border-transparent text-slate-500 hover:text-vaneduc-navy flex items-center space-x-2 whitespace-nowrap";
-
-      tab7.className = s === 'rema7' ? activeClass : inactiveClass;
-      tab14.className = s === 'rema14' ? activeClass : inactiveClass;
-      tabN.className = s === 'nuevos' ? activeClass : inactiveClass;
-      tabP.className = s === 'preplanta' ? activeClass : inactiveClass;
-
-      if (s === 'preplanta') {
-        secT.classList.add("hidden");
-        secP.classList.remove("hidden");
-      } else {
-        secT.classList.remove("hidden");
-        secP.classList.add("hidden");
-        poblarCursos();
-        filtrar();
-      }
-    }
-
-    cargarDatos();
+    // Carga inicial
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarTabla(datosPorHoja['REMA 7°']);
+    });
   </script>
 </body>
 </html>
